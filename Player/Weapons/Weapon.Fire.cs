@@ -88,7 +88,7 @@ partial class SDKWeapon
 		CreateBulletTracer( tr.EndPosition );
 
 		// If we hit some entity, do some effects on hit.
-		if ( tr.Entity.IsValid() ) 
+		if ( tr.Entity.IsValid() )
 			OnHitEntity( tr.Entity, tr );
 
 		return tr;
@@ -135,7 +135,7 @@ partial class SDKWeapon
 			.WithAnyTags( CollisionTags.Solid )
 			.WithAnyTags( CollisionTags.BulletClip )
 			.WithAnyTags( CollisionTags.Debris )
-			
+
 			// Doesn't colide with:
 			.WithoutTags( CollisionTags.NotSolid )
 
@@ -158,14 +158,14 @@ partial class SDKWeapon
 
 			DebugOverlay.Text(
 				$"Distance: {tr.Distance}\n" +
-				$"HitBox: {tr.HitboxIndex}\n" +
+				$"HitBox: {tr.Hitbox}\n" +
 				$"Entity: {tr.Entity}\n" +
 				$"Fraction: {tr.Fraction}",
 				tr.EndPosition,
 				time );
 		}
 
-		if( drawHit )
+		if ( drawHit )
 		{
 			DebugOverlay.Sphere( tr.EndPosition, 2f, Color.Red, time, true );
 		}

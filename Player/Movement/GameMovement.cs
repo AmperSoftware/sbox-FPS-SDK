@@ -106,7 +106,7 @@ public partial class GameMovement
 				break;
 
 			case SDKMoveType.NoClip:
-				FullNoClipMove(sv_noclip_speed, sv_noclip_accelerate);
+				FullNoClipMove( sv_noclip_speed, sv_noclip_accelerate );
 				break;
 
 			case SDKMoveType.Observer:
@@ -408,7 +408,7 @@ public partial class GameMovement
 	{
 		if ( Player.MoveType != SDKMoveType.Isometric &&
 			Player.MoveType != SDKMoveType.NoClip &&
-			Player.MoveType != SDKMoveType.Observer ) 
+			Player.MoveType != SDKMoveType.Observer )
 		{
 			if ( !Player.CanMove() )
 			{
@@ -440,7 +440,7 @@ public partial class GameMovement
 
 		DecayViewPunchAngle();
 
-		if ( !Player.IsAlive ) 
+		if ( !Player.IsAlive )
 		{
 			var v_angle = ViewAngles;
 			v_angle = v_angle + Player.ViewPunchAngle;

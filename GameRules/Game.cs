@@ -207,7 +207,7 @@ public partial class SDKGame : Game
 	{
 		float force = damage * ((48 * 48 * 82) / (size.x * size.y * size.z)) * scale;
 
-		if ( force > 1000 ) 
+		if ( force > 1000 )
 			force = 1000;
 
 		return force;
@@ -228,12 +228,10 @@ public partial class SDKGame : Game
 		player.RenderHud( ScreenSize );
 	}
 
-	public override void BuildInput( InputBuilder input )
+	public override void BuildInput()
 	{
-		Event.Run( "buildinput", input );
-
-		Local.Pawn?.BuildInput( input );
-
-		LastCamera?.BuildInput( input );
+		Event.Run( "buildinput" );
+		Local.Pawn?.BuildInput();
+		LastCamera?.BuildInput();
 	}
 }

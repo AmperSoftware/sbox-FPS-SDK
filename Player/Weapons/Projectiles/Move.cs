@@ -5,7 +5,7 @@ namespace Amper.FPS;
 partial class Projectile
 {
 	[Net] ProjectileMoveType _moveType { get; set; }
-	public new ProjectileMoveType MoveType { get => _moveType; set => UpdateMoveType( value ); }
+	public ProjectileMoveType MoveType { get => _moveType; set => UpdateMoveType( value ); }
 
 	private void UpdateMoveType( ProjectileMoveType type )
 	{

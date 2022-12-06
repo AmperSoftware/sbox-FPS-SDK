@@ -76,7 +76,7 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 	/// doesn't rely on client's input.
 	/// </summary>
 	[Event.Tick]
-	public virtual void Tick() 
+	public virtual void Tick()
 	{
 		UpdateLastKnownArea();
 		DrawDebugPredictionHistory();
@@ -219,7 +219,7 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 		MoveType = lastMoveType;
 		EnableHitboxes = lastEnableHitboxes;
 
-		using ( Prediction.Off() ) 
+		using ( Prediction.Off() )
 			if ( IsServer ) SetCollisionBoundsClient( mins, maxs );
 	}
 
@@ -241,7 +241,7 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 	{
 		MaxSpeed = CalculateMaxSpeed();
 
-		if ( MaxSpeed <= 0 ) 
+		if ( MaxSpeed <= 0 )
 			Velocity = 0;
 	}
 
@@ -305,20 +305,20 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 	/// <summary>
 	/// Called from the gamemode, clientside only.
 	/// </summary>
-	public override void BuildInput( InputBuilder input )
+	public override void BuildInput()
 	{
-		if ( input.StopProcessing )
+		if ( Input.StopProcessing )
 			return;
 
 		if ( _forceViewAngles.HasValue )
 		{
-			input.ViewAngles = _forceViewAngles.Value;
+			Input.AnalogLook = _forceViewAngles.Value;
 			_forceViewAngles = null;
 		}
 
-		ActiveWeapon?.BuildInput( input );
+		ActiveWeapon?.BuildInput();
 
-		if ( input.StopProcessing )
+		if ( Input.StopProcessing )
 			return;
 	}
 
