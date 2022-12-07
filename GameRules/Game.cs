@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Amper.FPS;
 
-public partial class SDKGame : Game
+public partial class SDKGame : GameManager
 {
 	public new static SDKGame Current { get; set; }
 

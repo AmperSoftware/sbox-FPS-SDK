@@ -240,5 +240,5 @@ public partial class SDKWeapon : AnimatedEntity, ITeam
 	public virtual void ClientTick() { }
 	public virtual void ServerTick() { }
 
-	[Event.Frame] public virtual void Frame() { }
+	[Event.Client.Frame] public virtual void Frame() { }
 }

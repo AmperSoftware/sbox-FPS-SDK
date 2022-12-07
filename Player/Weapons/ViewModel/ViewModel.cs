@@ -14,20 +14,19 @@ public partial class SDKViewModel : BaseViewModel
 		EnableViewmodelRendering = true;
 	}
 
-	public override void PostCameraSetup( ref CameraSetup camSetup )
+	[Event.Client.PostCamera]
+	public void PostCameraSetup( )
 	{
-		base.PostCameraSetup( ref camSetup );
-
 		var visible = ShouldDraw();
 		EnableDrawing = visible;
 
 		if ( visible )
-			CalculateView( ref camSetup );
+			CalculateView();
 	}
-
+	
 
 	public virtual bool ShouldDraw() => true;
-	public virtual void CalculateView( ref CameraSetup camSetup ) { }
+	public virtual void CalculateView() { }
 
 	public virtual void SetWeaponModel( string viewmodel, SDKWeapon weapon )
 	{

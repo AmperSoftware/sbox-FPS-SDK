@@ -11,16 +11,6 @@ partial class SDKGame
 			player.SwitchToNextBestWeapon();
 	}
 
-	// This is being called by Sandbox's native "kill" command.
-	public override void DoPlayerSuicide( Client cl )
-	{
-		var player = cl.Pawn as SDKPlayer;
-		if ( !player.IsValid() )
-			return;
-
-		player.CommitSuicide( explode: false );
-	}
-
 	// This is being called by Sandbox's native "noclip" command.
 	public override void DoPlayerNoclip( Client client )
 	{
@@ -39,6 +29,20 @@ partial class SDKGame
 
 		player.MoveType = SDKMoveType.Walk;
 		Log.Info( $"noclip OFF for {client.Name}" );
+	}
+
+	[ConCmd.Server("kill", Help = "On-Demand Heart Attack")]
+	public static void Command_Suicide()
+	{
+		var client = ConsoleSystem.Caller;
+		if ( !client.IsValid() )
+			return;
+
+		var player = client.Pawn as SDKPlayer;
+		if ( !player.IsValid() )
+			return;
+
+		player.CommitSuicide( explode: false );
 	}
 
 	[ConCmd.Server( "explode", Help = "Spontaneous Combustion!" )]
