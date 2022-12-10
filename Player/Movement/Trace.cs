@@ -22,7 +22,7 @@ partial class GameMovement
 	public virtual TraceResult TraceBBox( Vector3 start, Vector3 end, Vector3 mins, Vector3 maxs )
 	{
 		if( r_debug_movement_trace )
-			DebugOverlay.Box( end, mins, maxs, Host.IsServer ? Color.Blue : Color.Red, 0 );
+			DebugOverlay.Box( end, mins, maxs, Game.IsServer ? Color.Blue : Color.Red, 0 );
 
 		return SetupBBoxTrace( start, end, mins, maxs ).Run();
 	}

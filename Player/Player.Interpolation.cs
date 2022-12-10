@@ -17,13 +17,13 @@ partial class SDKPlayer
 
 	public void InterpolateFrame()
 	{
-		Host.AssertClient();
+		Game.AssertClient();
 
 		if ( cl_use_sbox_player_interpolation )
 			return;
 
 		InterpolationTime += Time.Delta;
-		float tickTime = Global.TickInterval;
+		float tickTime = Game.TickInterval;
 		var lerpTime = Math.Clamp( InterpolationTime / tickTime, 0, 1 );
 
 		Position = LastPosition.LerpTo( NetworkPosition, lerpTime );
@@ -42,7 +42,7 @@ partial class SDKPlayer
 		InterpolationTime = 0;
 
 		LastPosition = Position;
-		LastEyeLocalPosition = EyeLocalPosition;
+		LastEyeLocalPosition = this.GetLocalEyePosition();
 	}
 
 	public void StopInterpolating()
@@ -54,6 +54,6 @@ partial class SDKPlayer
 			return;
 
 		NetworkPosition = Position;
-		NetworkEyeLocalPosition = EyeLocalPosition;
+		NetworkEyeLocalPosition = this.GetLocalEyePosition();
 	}
 }

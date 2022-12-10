@@ -22,7 +22,7 @@ partial class SDKGame
 		Current.OnChatMessageSent( ConsoleSystem.Caller, message, ChatType.Team );
 	}
 
-	public virtual void OnChatMessageSent( Client sender, string message, ChatType type )
+	public virtual void OnChatMessageSent( IClient sender, string message, ChatType type )
 	{
 		var userName = "Server";
 		if ( sender != null )

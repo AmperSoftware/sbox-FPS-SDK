@@ -35,7 +35,7 @@ public partial class SDKGame : GameManager
 		SetupGameVariables();
 	}
 
-	public override void FrameSimulate( Client cl )
+	public override void FrameSimulate( IClient cl )
 	{
 		base.FrameSimulate( cl );
 		PostProcessingManager?.FrameSimulate();
@@ -91,7 +91,7 @@ public partial class SDKGame : GameManager
 
 	[ConVar.Client] public static bool cl_show_prediction_errors { get; set; }
 
-	public override void Simulate( Client cl )
+	public override void Simulate( IClient cl )
 	{
 		base.Simulate( cl );
 
@@ -101,16 +101,16 @@ public partial class SDKGame : GameManager
 		}
 	}
 
-	public override void ClientJoined( Client cl )
+	public override void ClientJoined( IClient cl )
 	{
 		var player = CreatePlayerForClient( cl );
 		cl.Pawn = player;
 		player.Respawn();
 	}
 
-	public virtual SDKPlayer CreatePlayerForClient( Client cl ) => new SDKPlayer();
+	public virtual SDKPlayer CreatePlayerForClient( IClient cl ) => new SDKPlayer();
 
-	public override void ClientDisconnect( Client client, NetworkDisconnectionReason reason )
+	public override void ClientDisconnect( IClient client, NetworkDisconnectionReason reason )
 	{
 		if ( client.Pawn.IsValid() )
 		{
@@ -218,7 +218,7 @@ public partial class SDKGame : GameManager
 	{
 		base.RenderHud();
 
-		var player = Local.Pawn as SDKPlayer;
+		var player = Game.LocalPawn as SDKPlayer;
 		if ( player == null )
 			return;
 
@@ -231,7 +231,7 @@ public partial class SDKGame : GameManager
 	public override void BuildInput()
 	{
 		Event.Run( "buildinput" );
-		Local.Pawn?.BuildInput();
+		Game.LocalPawn?.BuildInput();
 		LastCamera?.BuildInput();
 	}
 }

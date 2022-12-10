@@ -39,7 +39,7 @@ public struct RadiusDamageInfo
 		//
 
 		var dmgPos = DamageInfo.HitPosition;
-		var eyePos = entity.EyePosition;
+		var eyePos = entity.GetEyePosition();
 
 		var tr = Trace.Ray( dmgPos, eyePos )
 			.WorldOnly()

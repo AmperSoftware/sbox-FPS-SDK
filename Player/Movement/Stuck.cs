@@ -10,7 +10,7 @@ namespace Amper.FPS;
 partial class GameMovement
 {
 	public const float CHECK_STUCK_INTERVAL = 1;
-	public int CHECK_STUCK_TICK_INTERVAL => (int)(CHECK_STUCK_TICK_INTERVAL / Global.TickInterval);
+	public int CHECK_STUCK_TICK_INTERVAL => (int)(CHECK_STUCK_TICK_INTERVAL / Game.TickInterval);
 	public const float CHECKSTUCK_MINTIME = 0.05f;
 
 	public bool CanStuck()
@@ -43,7 +43,7 @@ partial class GameMovement
 		Vector3 offset, test;
 
 		// Only an issue on the client.
-		var idx = Host.IsServer ? 0 : 1;
+		var idx = Game.IsServer ? 0 : 1;
 
 		var fTime = Time.Now;
 

@@ -7,5 +7,5 @@ namespace Amper.FPS;
 /// </summary>
 public interface IPassiveChild
 {
-	public void PassiveSimulate( Client client );
+	public void PassiveSimulate( IClient client );
 }

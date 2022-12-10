@@ -54,7 +54,7 @@ public class PostProcessingManager
 
 	public void SetVisible<T>( bool visible ) where T : RenderHook, new()
 	{
-		if ( !Host.IsClient )
+		if ( !Game.IsClient )
 			return;
 
 		var cachedVisible = IsVisible<T>();

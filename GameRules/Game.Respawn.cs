@@ -150,7 +150,7 @@ partial class SDKGame
 
 			// nothing could fit us, place us at a random point,
 			// even if we get stuck
-			var rndpoint = Rand.FromList( sboxpoints );
+			var rndpoint = Game.Random.FromList( sboxpoints );
 			TryFitOnSpawnpoint( player, rndpoint, out var transform2 );
 			player.Transform = transform2;
 			player.ForceViewAngles( new Angles( 0, transform2.Rotation.Yaw(), 0 ) );

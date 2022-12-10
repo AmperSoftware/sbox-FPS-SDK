@@ -173,7 +173,7 @@ public partial class SDKCamera : CameraMode
 
 	public virtual void CalculateScreenShake( SDKPlayer player )
 	{
-		if ( !Host.IsClient )
+		if ( !Game.IsClient )
 			return;
 
 		Vector3 shakeAppliedOffset = 0;

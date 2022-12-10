@@ -6,7 +6,7 @@ partial class SDKGame
 {
 	public void UpdateAllClientsData()
 	{
-		var clients = Client.All;
+		var clients = Game.Clients;
 		foreach ( var client in clients )
 		{
 			var pawn = client.Pawn as SDKPlayer;
@@ -17,7 +17,7 @@ partial class SDKGame
 		}
 	}
 
-	public virtual void UpdateClientData( Client client, SDKPlayer player )
+	public virtual void UpdateClientData( IClient client, SDKPlayer player )
 	{
 		client.SetValue( "f_health", player.Health );
 		client.SetValue( "f_maxhealth", player.MaxHealth );
@@ -28,8 +28,8 @@ partial class SDKGame
 
 public static class ClientExtensions
 {
-	public static float GetHealth( this Client client ) => client.GetValue<float>( "f_health" );
-	public static float GetMaxHealth( this Client client ) => client.GetValue<float>( "f_maxhealth" );
-	public static bool IsAlive( this Client client ) => client.GetValue<bool>( "b_alive" );
-	public static int GetTeamNumber( this Client client ) => client.GetValue<int>( "n_teamnumber" );
+	public static float GetHealth( this IClient client ) => client.GetValue<float>( "f_health" );
+	public static float GetMaxHealth( this IClient client ) => client.GetValue<float>( "f_maxhealth" );
+	public static bool IsAlive( this IClient client ) => client.GetValue<bool>( "b_alive" );
+	public static int GetTeamNumber( this IClient client ) => client.GetValue<int>( "n_teamnumber" );
 }

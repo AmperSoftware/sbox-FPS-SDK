@@ -9,7 +9,7 @@ partial class SDKPlayer : ITeam
 
 	public virtual bool ChangeTeam( int team, bool autoTeam, bool silent, bool autobalance = false )
 	{
-		Host.AssertServer();
+		Game.AssertServer();
 
 		// Desired team doesn't exist, don't bother changing to it.
 		if ( !TeamManager.TeamExists( team ) )

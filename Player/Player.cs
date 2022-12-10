@@ -1,13 +1,16 @@
 using Sandbox;
 using System.Linq;
 using System;
+using System.Collections.Generic;
 
 namespace Amper.FPS;
 
 [Title( "Player" ), Icon( "emoji_people" )]
 public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtendedDamageInfo
 {
-	public static SDKPlayer LocalPlayer => Local.Pawn as SDKPlayer;
+	public virtual Vector3 EyePosition => Source1Extensions.GetEyePosition( this );
+	public virtual Rotation EyeRotation => Source1Extensions.GetEyeRotation( this );
+	public static SDKPlayer LocalPlayer => Game.LocalPawn as SDKPlayer;
 
 	public override void Spawn()
 	{
@@ -36,7 +39,7 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 
 	public virtual float GetMaxHealth() => 100;
 
-	public override void FrameSimulate( Client cl )
+	public override void FrameSimulate( IClient cl )
 	{
 		base.FrameSimulate( cl );
 
@@ -51,7 +54,7 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 	/// Code runs here on the SERVER and SIMULATED CLIENT ONLY. Use this for code that
 	/// relies on client's input.
 	/// </summary>
-	public override void Simulate( Client cl )
+	public override void Simulate( IClient cl )
 	{
 		if ( IsObserver )
 			SimulateObserver();
@@ -251,7 +254,7 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 	/// </summary>
 	public virtual float CalculateMaxSpeed() => GameMovement.sv_maxspeed;
 
-	public virtual void SimulatePassiveChildren( Client client )
+	public virtual void SimulatePassiveChildren( IClient client )
 	{
 		var children = Children.OfType<IPassiveChild>().ToArray();
 
@@ -268,39 +271,27 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 	{
 		if ( !IsAlive )
 			return;
-
+		
 		Health = 0;
-		var flags = DamageFlags.Generic;
+		List<string> tags = new() { DamageFlags.Generic };
 
 		if ( explode )
 		{
 			// If we set to explode ourselves, gib!
-			flags |= DamageFlags.Blast;
-			flags |= DamageFlags.AlwaysGib;
+			tags.Add( DamageFlags.Blast );
+			tags.Add( DamageFlags.AlwaysGib);
 		}
 
 		var info = ExtendedDamageInfo.Create( 1 )
 			.WithAttacker( this )
 			.WithInflictor( this )
 			.WithAllPositions( Position )
-			.WithFlag( flags );
+			.WithTags( tags );
 
 		TakeDamage( info );
 	}
 
 	public virtual float DuckingSpeedModifier => 0.33f;
-
-	/// <summary>
-	/// Called after the camera setup logic has run. Allow the player to
-	/// do stuff to the camera, or using the camera. Such as positioning entities
-	/// relative to it, like viewmodels etc.
-	/// </summary>
-	public override void PostCameraSetup( ref CameraSetup setup )
-	{
-		Host.AssertClient();
-
-		ActiveWeapon?.PostCameraSetup( ref setup );
-	}
 
 	/// <summary>
 	/// Called from the gamemode, clientside only.

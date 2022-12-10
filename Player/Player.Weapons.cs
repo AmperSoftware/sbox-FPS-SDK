@@ -16,7 +16,7 @@ partial class SDKPlayer
 	/// </summary>
 	public virtual bool CanAttack() => true;
 
-	public virtual void SimulateActiveWeapon( Client cl )
+	public virtual void SimulateActiveWeapon( IClient cl )
 	{
 		if ( Input.ActiveChild is SDKWeapon newWeapon )
 			SwitchToWeapon( newWeapon );
@@ -77,10 +77,10 @@ partial class SDKPlayer
 		ActiveWeapon = weapon;
 		return true;
 	}
-
+	
 	public virtual bool EquipWeapon( SDKWeapon weapon, bool makeActive = false )
 	{
-		Host.AssertServer();
+		Game.AssertServer();
 
 		if ( !weapon.IsValid() )
 			return false;
@@ -215,7 +215,7 @@ partial class SDKPlayer
 
 		if ( DropWeapon( weapon, origin, vecForce ) )
 		{
-			weapon.ApplyLocalAngularImpulse( new Vector3( Rand.Float( -600, 600 ), Rand.Float( -600, 600 ), 0 ) );
+			weapon.ApplyLocalAngularImpulse( new Vector3( Game.Random.Float( -600, 600 ), Game.Random.Float( -600, 600 ), 0 ) );
 			return true;
 		}
 

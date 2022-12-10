@@ -14,7 +14,7 @@ public partial class Projectile
 	[ClientRpc]
 	public virtual void DoExplosionEffect( Vector3 position, Vector3 normal )
 	{
-		Host.AssertClient();
+		Game.AssertClient();
 
 		var boom = Particles.Create( ExplosionParticleName, position );
 		boom.SetForward( 0, normal );

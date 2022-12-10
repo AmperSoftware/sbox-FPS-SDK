@@ -6,7 +6,7 @@ partial class GameMovement
 {
 	protected virtual void ShowDebugOverlay()
 	{
-		if ( sv_debug_movement && Player.Client.IsListenServerHost && Host.IsServer )
+		if ( sv_debug_movement && Player.Client.IsListenServerHost && Game.IsServer )
 		{
 			DebugOverlay.ScreenText( CreateDebugString(), new Vector2( 60, 250 ) );
 		}

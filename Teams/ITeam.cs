@@ -12,7 +12,7 @@ public interface ITeam
 	/// <summary>
 	/// Returns true only if both entities are team entities, and both are in the same team. 
 	/// </summary>
-	static public bool IsSame( Entity one, Entity two )
+	static public bool IsSame( IEntity one, IEntity two )
 	{
 		if ( one is not ITeam teamOne ) return false;
 		if ( two is not ITeam teamTwo ) return false;

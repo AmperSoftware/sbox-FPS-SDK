@@ -18,15 +18,15 @@ public class EntityJsonConverter : JsonConverter<Entity>
 	}
 }
 
-public class ClientJsonConverter : JsonConverter<Client>
+public class ClientJsonConverter : JsonConverter<IClient>
 {
-	public override Client Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
+	public override IClient Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
 	{
 		var netId = reader.GetInt32();
-		return Client.All.FirstOrDefault( x => x.NetworkIdent == netId );
+		return Game.Clients.FirstOrDefault( x => x.NetworkIdent == netId );
 	}
 
-	public override void Write( Utf8JsonWriter writer, Client client, JsonSerializerOptions options ) => writer.WriteNumberValue( client.NetworkIdent );
+	public override void Write( Utf8JsonWriter writer, IClient client, JsonSerializerOptions options ) => writer.WriteNumberValue( client.NetworkIdent );
 }
 
 public class ResourceJsonConverter : JsonConverter<Resource>

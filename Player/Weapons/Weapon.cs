@@ -8,7 +8,7 @@ public partial class SDKWeapon : AnimatedEntity, ITeam
 	public SDKPlayer Player => Owner as SDKPlayer;
 
 	[Net, Predicted] public bool IsDeployed { get; set; }
-	[Net] public Client OriginalOwner { get; set; }
+	[Net] public IClient OriginalOwner { get; set; }
 	[Net] public int ViewModelIndex { get; set; }
 	[Net] public int SlotNumber { get; set; }
 	[Net] public int TeamNumber { get; set; }
@@ -37,7 +37,7 @@ public partial class SDKWeapon : AnimatedEntity, ITeam
 
 	public virtual bool RemoveOnRoundRestart() => false;
 
-	public override void Simulate( Client cl )
+	public override void Simulate( IClient cl )
 	{
 		SimulateReload();
 		SimulateAttack();

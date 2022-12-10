@@ -174,7 +174,7 @@ partial class GameMovement
 			return;
 		}
 
-		if ( oldGround == null && Player.WaterLevel == 0 )
+		if ( oldGround == null && Player.GetWaterLevel() == 0 )
 		{
 			Velocity -= Player.BaseVelocity;
 			return;

@@ -11,8 +11,8 @@ partial class SDKGame
 			player.SwitchToNextBestWeapon();
 	}
 
-	// This is being called by Sandbox's native "noclip" command.
-	public override void DoPlayerNoclip( Client client )
+	[ConCmd.Server("noclip", Help ="Disable electromagnetic energies to be able to pass through walls")]
+	public static void Command_Noclip( IClient client )
 	{
 		var player = client.Pawn as SDKPlayer;
 		if ( !player.IsValid() ) 
@@ -113,8 +113,8 @@ partial class SDKGame
 		var player = client.Pawn;
 		if ( player == null )
 			return;
-
-		var tr = Trace.Ray( player.EyePosition, player.EyePosition + player.EyeRotation.Forward * 2000 )
+		
+		var tr = Trace.Ray( player.GetEyePosition(), player.GetEyePosition() + player.GetEyeRotation().Forward * 2000 )
 			.Ignore( player )
 			.Run();
 

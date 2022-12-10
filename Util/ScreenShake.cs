@@ -19,17 +19,17 @@ public partial class ScreenShake : BaseNetworkable
 		if ( amplitude > MaxAmplitude )
 			amplitude = MaxAmplitude;
 
-		foreach ( var client in Client.All )
+		foreach ( var client in Game.Clients )
 		{
-			var player = client.Pawn;
-
-			if ( !player.IsValid() )
+			var pawn = client.Pawn;
+			
+			if ( !pawn.IsValid() || pawn is not SDKPlayer ply )
 				continue;
 
-			if ( !airshake && command == ShakeCommand.Start && !player.GroundEntity.IsValid() )
+			if ( !airshake && command == ShakeCommand.Start && !ply.GroundEntity.IsValid() )
 				continue;
 
-			var localAmplitude = ComputeShakeAmplitude( center, player.WorldSpaceBounds.Center, amplitude, radius );
+			var localAmplitude = ComputeShakeAmplitude( center, ply.WorldSpaceBounds.Center, amplitude, radius );
 
 			if ( localAmplitude < 0 )
 				continue;
@@ -38,7 +38,7 @@ public partial class ScreenShake : BaseNetworkable
 		}
 	}
 
-	public static void TransmitShakeEvent( Client player, float localAmplitude, float frequency, float duration, ShakeCommand command )
+	public static void TransmitShakeEvent( IClient player, float localAmplitude, float frequency, float duration, ShakeCommand command )
 	{
 		if ( (localAmplitude > 0) || command == ShakeCommand.Stop )
 		{

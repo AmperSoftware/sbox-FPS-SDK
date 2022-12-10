@@ -85,7 +85,7 @@ partial class GameMovement
 		// Assume that we are not in water at all.
 		Player.WaterLevelType = WaterLevelType.NotInWater;
 
-		var fraction = Player.WaterLevel;
+		var fraction = Player.GetWaterLevel();
 		var playerHeight = vPlayerExtents.z;
 		var viewHeight = vPlayerView.z;
 

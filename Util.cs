@@ -1,13 +1,20 @@
 ﻿using Sandbox;
+using Sandbox.Diagnostics;
 using System;
 
 namespace Amper.FPS;
 
 public static class Source1Extensions
 {
+	public static Vector3 GetEyePosition( this IEntity ent ) => ent.AimRay.Position;
+	public static Vector3 GetEyeForward( this IEntity ent ) => ent.AimRay.Forward;
+	public static Rotation GetEyeRotation( this IEntity ent ) => Rotation.LookAt(ent.AimRay.Forward);
+
+	public static Vector3 GetLocalEyePosition( this IEntity ent ) => ent.Transform.PointToLocal(ent.GetEyePosition());
+	public static Rotation GetLocalEyeRotation( this IEntity ent ) => ent.Transform.RotationToLocal( ent.GetEyeRotation() );
 	public async static void Reset( this DoorEntity door )
 	{
-		if ( !Host.IsServer ) return;
+		if ( !Game.IsServer ) return;
 		var startsLocked = door.SpawnSettings.HasFlag( DoorEntity.Flags.StartLocked );
 
 		// unlock the door to force change.
@@ -25,8 +32,8 @@ public static class Source1Extensions
 	}
 
 	public static bool IsValid( this GameResource resource ) => resource != null;
-	public static void NetInfo( this Logger logger, FormattableString message ) => logger.Info( $"[{(Host.IsServer ? "SV" : "CL")}] {message}" );
-	public static void NetInfo( this Logger logger, object message ) => logger.Info( $"[{(Host.IsServer ? "SV" : "CL")}] {message}" );
+	public static void NetInfo( this Logger logger, FormattableString message ) => logger.Info( $"[{(Game.IsServer ? "SV" : "CL")}] {message}" );
+	public static void NetInfo( this Logger logger, object message ) => logger.Info( $"[{(Game.IsServer ? "SV" : "CL")}] {message}" );
 }
 
 public static class CollisionTags
@@ -89,4 +96,21 @@ public static class CollisionTags
 	public const string BulletClip = "bulletclip";
 	public const string ProjectileClip = "projectileclip";
 	public const string NPCClip = "npcclip";
+}
+
+public static class DamageFlags
+{
+	public const string Generic = "generic";
+	public const string Bullet = "bullet";
+	public const string Blast = "explosion";
+	public const string Slash = "slash";
+	public const string Burn = "burn";
+	public const string Vehicle = "vehicle";
+	public const string Fall = "fall";
+	public const string Blunt = "blunt";
+	public const string Shock = "electric";
+	public const string Drown = "water";
+
+	public const string AlwaysGib = "always_gib";
+	public const string DoNotGib = "never_gib";
 }

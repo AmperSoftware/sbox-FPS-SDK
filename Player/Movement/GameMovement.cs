@@ -49,7 +49,7 @@ public partial class GameMovement
 
 	public virtual void FrameUpdate()
 	{
-		Host.AssertClient();
+		Game.AssertClient();
 		ViewAngles = Input.Rotation;
 	}
 

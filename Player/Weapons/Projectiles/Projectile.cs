@@ -5,8 +5,7 @@ namespace Amper.FPS;
 public abstract partial class Projectile : ModelEntity, ITeam
 {
 	[Net] public int TeamNumber { get; set; }
-	[Net] public DamageFlags DamageFlags { get; set; }
-	public int CustomKillType { get; set; }
+	[Net] public ExtendedDamageInfo DamageInfo { get; set; }
 	[Net] public TimeSince TimeSinceCreated { get; set; }
 
 	/// <summary>
@@ -60,7 +59,6 @@ public abstract partial class Projectile : ModelEntity, ITeam
 		Gravity = 0;
 		MoveType = ProjectileMoveType.None;
 		Predictable = false;
-		DamageFlags = 0;
 
 		EnableDrawing = false;
 		EnableHideInFirstPerson = true;
@@ -137,14 +135,14 @@ public abstract partial class Projectile : ModelEntity, ITeam
 
 	public virtual void Explode()
 	{
-		Host.AssertServer();
+		Game.AssertServer();
 
 		Explode( Position );
 	}
 
 	public virtual void Explode( Vector3 position )
 	{
-		Host.AssertServer();
+		Game.AssertServer();
 
 		var origin = position + Vector3.Up * 16;
 		var target = position + Vector3.Down * 16;
@@ -158,51 +156,18 @@ public abstract partial class Projectile : ModelEntity, ITeam
 
 	public virtual void Explode( TraceResult trace )
 	{
-		Host.AssertServer();
+		Game.AssertServer();
 
 		DoExplosionEffect( Position, trace.Normal );
 
 		if ( Owner.IsValid() ) 
 		{
-			var dmgInfo = CreateDamageInfo();
-			var radius = new RadiusDamageInfo( dmgInfo, Radius, this, AttackerRadius, Enemy );
+			var radius = new RadiusDamageInfo( DamageInfo, Radius, this, AttackerRadius, Enemy );
 			SDKGame.Current.ApplyRadiusDamage( radius );
 		}
 
 		DoScorchTrace( Position, trace.Normal );
 		Delete();
-	}
-
-	public ExtendedDamageInfo CreateDamageInfo()
-	{
-		return CreateDamageInfo( Damage );
-	}
-
-	public ExtendedDamageInfo CreateDamageInfo( float damage )
-	{
-		return CreateDamageInfo( damage, DamageFlags );
-	}
-
-	public ExtendedDamageInfo CreateDamageInfo( float damage, DamageFlags flags )
-	{
-		// If this projectile has an owner, report their position
-		// otherwise fallback to our own position.
-		var reportPos = Owner.IsValid() 
-			? Owner.EyePosition 
-			: Position;
-
-		var info = ExtendedDamageInfo.Create( damage )
-			.WithReportPosition( reportPos )
-			.WithOriginPosition( OriginalPosition )
-			.WithCustomKillType( CustomKillType )
-			.WithHitPosition( Position )
-			.WithAttacker( Owner )
-			.WithInflictor( this )
-			.WithWeapon( Launcher )
-			.WithFlag( flags );
-
-		ApplyDamageModifications( ref info );
-		return info;
 	}
 
 	public virtual void ApplyDamageModifications( ref ExtendedDamageInfo info ) { }
@@ -227,26 +192,21 @@ public abstract partial class Projectile : ModelEntity, ITeam
 
 	public virtual bool IsDestroyable => false;
 
-	public static T Create<T>(Vector3 origin, Vector3 velocity, Entity owner, Entity launcher, float damage, DamageFlags flags = 0, int customKillType = 0 ) where T : Projectile, new()
+	public static T Create<T>(Vector3 origin, Vector3 velocity, Entity owner, Entity launcher, ExtendedDamageInfo info) where T : Projectile, new()
 	{
-		// Create the projectile.
-		var ent = new T();
+		T ent = new();
+
+		ent.Position = origin;
+		ent.Velocity = velocity;
 
 		ent.Owner = owner;
 		ent.Launcher = launcher;
+		ent.DamageInfo = info;
 
 		// Set the projectile's team to owner's team if it has a team.
 		if ( owner is ITeam ownerTeam )
 			ent.TeamNumber = ownerTeam.TeamNumber;
 
-		ent.Position = origin;
-		ent.Velocity = velocity;
-
-		ent.Damage = damage;
-		ent.DamageFlags |= flags;
-		ent.CustomKillType = customKillType;
-
-		ent.OnInitialized();
 		return ent;
 	}
 }

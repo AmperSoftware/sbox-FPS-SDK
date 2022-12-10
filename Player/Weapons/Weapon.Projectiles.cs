@@ -4,9 +4,9 @@ namespace Amper.FPS;
 
 public partial class SDKWeapon
 {
-	public T FireProjectile<T>( Vector3 origin, Vector3 velocity, float damage, DamageFlags flags = 0, int customKillType = 0 ) where T : Projectile, new()
+	public T FireProjectile<T>( Vector3 origin, Vector3 velocity, float damage ) where T : Projectile, new()
 	{
-		return Projectile.Create<T>( origin, velocity, Owner, this, damage, flags, customKillType );
+		return Projectile.Create<T>( origin, velocity, Owner, this, ExtendedDamageInfo.Create(damage) );
 	}
 
 	public virtual void GetProjectileFireSetup( Vector3 offset, out Vector3 origin, out Vector3 direction, bool hitTeammates = false, float maxRange = 2000 )

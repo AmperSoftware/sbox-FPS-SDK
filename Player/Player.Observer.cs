@@ -64,8 +64,8 @@ partial class SDKPlayer
 
 		if ( IsRoaming ) 
 		{
-			var start = target.EyePosition;
-			var dir = target.EyeRotation.Forward.WithZ( 0 );
+			var start = target.GetEyeRotation();
+			var dir = target.GetEyeRotation().Forward.WithZ( 0 );
 			var end = start + dir * -64;
 
 			var tr = Trace.Ray( start, end )
@@ -74,7 +74,7 @@ partial class SDKPlayer
 				.Run();
 
 			Position = tr.EndPosition;
-			Rotation = target.EyeRotation;
+			Rotation = target.GetEyeRotation();
 			Velocity = 0;
 		}
 

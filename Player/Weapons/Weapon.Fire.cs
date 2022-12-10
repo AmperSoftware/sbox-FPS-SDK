@@ -47,7 +47,7 @@ partial class SDKWeapon
 	/// </summary>
 	protected virtual TraceResult FireBulletServer( float damage, int seedOffset = 0 )
 	{
-		Host.AssertServer();
+		Game.AssertServer();
 		var tr = TraceFireBullet( seedOffset );
 
 		// We didn't hit any entity, early out.
@@ -80,7 +80,7 @@ partial class SDKWeapon
 	/// </summary>
 	protected virtual TraceResult FireBulletEffects( float damage, int seedOffset = 0 )
 	{
-		Host.AssertClient();
+		Game.AssertClient();
 
 		var tr = TraceFireBullet( seedOffset );
 
@@ -107,7 +107,7 @@ partial class SDKWeapon
 
 	public virtual TraceResult TraceFireBullet( int seedOffset = 0 )
 	{
-		Rand.SetSeed( Time.Tick + seedOffset );
+		Game.SetRandomSeed( Time.Tick + seedOffset );
 
 		var spread = Vector3.Random.WithZ( 0 ) * GetSpread();
 

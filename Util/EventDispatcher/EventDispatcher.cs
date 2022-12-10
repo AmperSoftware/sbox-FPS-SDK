@@ -234,7 +234,7 @@ public partial class EventDispatcher
 		//Check if this event should be sent to clients and/or server.
 		if ( (dispatchTypes & DispatchType.Client) == DispatchType.Client )
 		{
-			if( Host.IsClient )
+			if( Game.IsClient )
 			{
 				RecieveEventLocal( name, args );
 			}
@@ -247,7 +247,7 @@ public partial class EventDispatcher
 
 		if ( (dispatchTypes & DispatchType.Server) == DispatchType.Server )
 		{
-			if ( Host.IsServer )
+			if ( Game.IsServer )
 			{
 				RecieveEventLocal( name, args );
 			}
