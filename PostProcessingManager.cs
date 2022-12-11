@@ -9,7 +9,7 @@ public class PostProcessingManager
 	Dictionary<Type, RenderHook> Effects = new();
 	Dictionary<Type, bool> EnabledCached = new();
 	Dictionary<Type, bool> ForceEnabled = new();
-	
+
 	public void FrameSimulate()
 	{
 		Update();
@@ -36,7 +36,7 @@ public class PostProcessingManager
 		if ( Effects.TryGetValue( type, out var effect ) )
 			return effect;
 
-		effect = TypeLibrary.Create<RenderHook>(type); 
+		effect = TypeLibrary.Create<RenderHook>( type );
 		Effects.Add( type, effect );
 
 		Map.Camera.AddHook( effect );
@@ -103,7 +103,8 @@ public class PostProcessingManager
 		{
 			manager.SetForced( name, enabled );
 			Log.Info( $"Changed \"{name}\" effect visibility: {enabled}." );
-		} catch
+		}
+		catch
 		{
 			Log.Info( $"Failed to change visibility of \"{name}\" effect." );
 		}

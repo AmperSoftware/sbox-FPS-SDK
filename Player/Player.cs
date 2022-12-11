@@ -223,7 +223,7 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 		EnableHitboxes = lastEnableHitboxes;
 
 		using ( Prediction.Off() )
-			if ( IsServer ) SetCollisionBoundsClient( mins, maxs );
+			if ( Game.IsServer ) SetCollisionBoundsClient( mins, maxs );
 	}
 
 	[ClientRpc]
@@ -271,7 +271,7 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 	{
 		if ( !IsAlive )
 			return;
-		
+
 		Health = 0;
 		List<string> tags = new() { DamageFlags.Generic };
 
@@ -279,7 +279,7 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 		{
 			// If we set to explode ourselves, gib!
 			tags.Add( DamageFlags.Blast );
-			tags.Add( DamageFlags.AlwaysGib);
+			tags.Add( DamageFlags.AlwaysGib );
 		}
 
 		var info = ExtendedDamageInfo.Create( 1 )
@@ -352,7 +352,7 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 		if ( !r_debug_prediction_history )
 			return;
 
-		if ( IsClient )
+		if ( Game.IsClient )
 		{
 			if ( Prediction.FirstTime )
 			{
@@ -373,7 +373,7 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 
 	public void UpdateLastKnownArea()
 	{
-		if ( !IsServer )
+		if ( !Game.IsServer )
 			return;
 
 		if ( !NavMesh.IsLoaded )

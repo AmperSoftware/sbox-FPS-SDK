@@ -26,7 +26,7 @@ partial class SDKPlayer
 
 	public virtual void SimulateObserver()
 	{
-		if ( IsServer )
+		if ( Game.IsServer )
 		{
 			if ( IsSpectating )
 			{
@@ -62,7 +62,7 @@ partial class SDKPlayer
 
 		ObserverTarget = target;
 
-		if ( IsRoaming ) 
+		if ( IsRoaming )
 		{
 			var start = target.GetEyeRotation();
 			var dir = target.GetEyeRotation().Forward.WithZ( 0 );
@@ -95,7 +95,7 @@ partial class SDKPlayer
 	public void ValidateObserverSettings()
 	{
 		// If we're forced into observer mode
-		if( IsForcedObserverMode )
+		if ( IsForcedObserverMode )
 		{
 			if ( !CanObserveTarget( ObserverTarget ) )
 			{
@@ -164,7 +164,7 @@ partial class SDKPlayer
 
 			var target = ents[index];
 
-			if ( !CanObserveTarget( target ) ) 
+			if ( !CanObserveTarget( target ) )
 				continue;
 
 			return target;
@@ -182,7 +182,7 @@ partial class SDKPlayer
 		if ( ObserverMode == ObserverMode.None )
 			return;
 
-		if ( ObserverMode > ObserverMode.Deathcam ) 
+		if ( ObserverMode > ObserverMode.Deathcam )
 			LastObserverMode = ObserverMode;
 
 		ObserverMode = ObserverMode.None;
@@ -229,15 +229,15 @@ partial class SDKPlayer
 
 	public virtual bool CanObserveTarget( Entity target )
 	{
-		if ( target == null ) 
+		if ( target == null )
 			return false;
 
 		// We can't observe ourselves.
 		if ( target == this )
-			return false; 
+			return false;
 
 		// don't watch invisible players
-		if ( !target.EnableDrawing ) 
+		if ( !target.EnableDrawing )
 			return false;
 
 		if ( target is SDKPlayer player )
@@ -245,7 +245,7 @@ partial class SDKPlayer
 			if ( !player.IsAlive )
 			{
 				// allow watching until 3 seconds after death to see death animation
-				if ( TimeSinceDeath > DeathAnimationTime ) 
+				if ( TimeSinceDeath > DeathAnimationTime )
 					return false;
 			}
 

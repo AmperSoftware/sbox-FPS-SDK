@@ -32,7 +32,7 @@ partial class SDKPlayer
 
 	public void StartInterpolating()
 	{
-		if ( !IsClient )
+		if ( !Game.IsClient )
 			return;
 
 		if ( cl_use_sbox_player_interpolation )
@@ -47,7 +47,7 @@ partial class SDKPlayer
 
 	public void StopInterpolating()
 	{
-		if ( !IsClient )
+		if ( !Game.IsClient )
 			return;
 
 		if ( cl_use_sbox_player_interpolation )

@@ -16,12 +16,12 @@ public partial class SDKGame : GameManager
 		Current = this;
 		Movement = new();
 
-		if ( IsClient )
+		if ( Game.IsClient )
 		{
 			PostProcessingManager = new();
 		}
 
-		if ( IsServer )
+		if ( Game.IsServer )
 		{
 			NavMesh = new();
 		}
@@ -76,7 +76,7 @@ public partial class SDKGame : GameManager
 	{
 		SimulateStates();
 
-		if ( IsServer )
+		if ( Game.IsServer )
 		{
 			CheckWaitingForPlayers();
 			UpdateAllClientsData();
@@ -95,7 +95,7 @@ public partial class SDKGame : GameManager
 	{
 		base.Simulate( cl );
 
-		if ( IsClient && cl_show_prediction_errors && !Prediction.FirstTime )
+		if ( Game.IsClient && cl_show_prediction_errors && !Prediction.FirstTime )
 		{
 			DebugOverlay.ScreenText( $"Prediction Error! Rerunning ticks... (Tick: {Time.Tick})", new Vector2( Screen.Width - 400, 120 ), 0, Color.Red, .6f );
 		}

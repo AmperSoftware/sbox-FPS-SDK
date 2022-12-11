@@ -36,10 +36,10 @@ partial class SDKGame
 
 	public void StartWaitingForPlayers()
 	{
-		if ( !IsServer ) 
+		if ( !Game.IsServer )
 			return;
 
-		if ( IsWaitingForPlayers ) 
+		if ( IsWaitingForPlayers )
 			return;
 
 		IsWaitingForPlayers = true;
@@ -51,7 +51,7 @@ partial class SDKGame
 
 	public void StopWaitingForPlayers()
 	{
-		if ( !IsServer )
+		if ( !Game.IsServer )
 			return;
 
 		if ( !IsWaitingForPlayers )

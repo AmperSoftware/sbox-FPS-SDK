@@ -77,7 +77,7 @@ partial class SDKPlayer
 
 	public virtual void PlayStepSound( Vector3 origin, string sound, float volume = 1f )
 	{
-		if ( IsClient && !Prediction.FirstTime )
+		if ( Game.IsClient && !Prediction.FirstTime )
 			return;
 
 		if ( string.IsNullOrWhiteSpace( sound ) )

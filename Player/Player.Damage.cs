@@ -18,7 +18,7 @@ partial class SDKPlayer
 	/// <param name="info"></param>
 	public virtual void TakeDamage( ExtendedDamageInfo info )
 	{
-		if ( !IsServer )
+		if ( !Game.IsServer )
 			return;
 
 		// We have been attacked by someone.
@@ -26,7 +26,7 @@ partial class SDKPlayer
 
 		// Check if player can receive damage from attacker.
 		var attacker = info.Attacker;
-		if ( !CanTakeDamage( attacker, info ) ) 
+		if ( !CanTakeDamage( attacker, info ) )
 			return;
 
 		// Apply damage modifications that are exclusive to the Player.
@@ -45,7 +45,7 @@ partial class SDKPlayer
 		Health -= info.Damage;
 
 		// We might want to avoid dying, do so.
-		if ( ShouldPreventDeath( info ) ) 
+		if ( ShouldPreventDeath( info ) )
 			PreventDeath( info );
 
 		if ( Health <= 0f )
@@ -53,7 +53,7 @@ partial class SDKPlayer
 
 		// Do all the reactions to this damage.
 		OnTakeDamageReaction( info );
-		
+
 		// Make an rpc to do stuff clientside.
 		TakeDamageRPC( info.Attacker, info.Weapon, info.Damage, info.Tags.ToArray(), info.HitPosition, info.Force );
 
@@ -120,7 +120,7 @@ partial class SDKPlayer
 	/// <summary>
 	/// Punch player's view when they get punched.
 	/// </summary>
-	public virtual void ApplyViewPunchFromDamage( ExtendedDamageInfo info ) 
+	public virtual void ApplyViewPunchFromDamage( ExtendedDamageInfo info )
 	{
 		ApplyViewPunchImpulse( -2 );
 	}
@@ -154,14 +154,14 @@ partial class SDKPlayer
 	public virtual void OnTakeDamageReaction( ExtendedDamageInfo info )
 	{
 		// Apply velocity to the player from the damage.
-		if ( ShouldApplyPushFromDamage( info ) ) 
+		if ( ShouldApplyPushFromDamage( info ) )
 			ApplyPushFromDamage( info );
 
 		// Apply view kick.
-		if ( ShouldApplyViewPunchFromDamage( info ) ) 
+		if ( ShouldApplyViewPunchFromDamage( info ) )
 			ApplyViewPunchFromDamage( info );
 
-		if ( ShouldFlinchFromDamage( info ) ) 
+		if ( ShouldFlinchFromDamage( info ) )
 			PlayFlinchFromDamage( info );
 
 		if ( ShouldBleedFromDamage( info ) )

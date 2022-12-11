@@ -9,7 +9,7 @@ partial class Projectile
 
 	private void UpdateMoveType( ProjectileMoveType type )
 	{
-		if ( !IsServer )
+		if ( !Game.IsServer )
 			return;
 
 		// Movetype didn't change.

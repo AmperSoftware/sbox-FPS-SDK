@@ -18,9 +18,9 @@ partial class SDKCamera
 		// Instead of letting the player rotate around an invisible point, treat
 		// the point as a fixed camera.
 
-		var specPos = target.EyePosition - Rotation.Forward * 96;
+		var specPos = target.GetEyePosition() - Rotation.Forward * 96;
 
-		var tr = Trace.Ray( target.EyePosition, specPos )
+		var tr = Trace.Ray( target.GetEyePosition(), specPos )
 			.Ignore( target )
 			.WithAnyTags( CollisionTags.Solid )
 			.Run();

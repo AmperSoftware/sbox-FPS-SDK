@@ -18,8 +18,8 @@ partial class SDKPlayer
 	public void ForceViewAngles( Angles angles )
 	{
 		EyeRotation = angles.ToRotation();
-		if ( IsServer ) ForceViewAnglesRPC( angles );
-		if ( IsClient ) _forceViewAngles = angles;
+		if ( Game.IsServer ) ForceViewAnglesRPC( angles );
+		if ( Game.IsClient ) _forceViewAngles = angles;
 	}
 
 	[ClientRpc]
@@ -75,7 +75,7 @@ partial class SDKPlayer
 	public virtual float StepSize => GameMovement.sv_stepsize;
 
 	[Net, Predicted] public PlayerFlags Flags { get; set; }
-	
+
 	public void AddFlags( PlayerFlags flag ) { Flags |= flag; }
 	public void RemoveFlag( PlayerFlags flag ) { Flags &= ~flag; }
 

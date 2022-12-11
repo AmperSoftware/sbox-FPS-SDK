@@ -228,12 +228,12 @@ public partial class SDKWeapon : AnimatedEntity, ITeam
 	protected virtual void DebugScreenText( float interval ) { }
 	[ConVar.Replicated] public static bool sv_debug_weapons { get; set; }
 
-	[Event.Tick] 
-	void TickInternal() 
-	{ 
-		Tick(); 
-		if ( IsServer ) ServerTick();
-		if ( IsClient ) ClientTick(); 
+	[Event.Tick]
+	void TickInternal()
+	{
+		Tick();
+		if ( Game.IsServer ) ServerTick();
+		if ( Game.IsClient ) ClientTick();
 	}
 
 	public virtual void Tick() { }

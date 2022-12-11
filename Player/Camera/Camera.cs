@@ -21,7 +21,7 @@ public partial class SDKCamera : CameraMode
 	public override void Update()
 	{
 		var player = SDKPlayer.LocalPlayer;
-		if ( player == null ) 
+		if ( player == null )
 			return;
 
 		//
@@ -62,7 +62,7 @@ public partial class SDKCamera : CameraMode
 		Rotation *= Rotation.From( punch.x, punch.y, punch.z );
 		SmoothViewOnStairs( player );
 
-		if( cl_thirdperson )
+		if ( cl_thirdperson )
 		{
 			Viewer = null;
 
@@ -91,7 +91,7 @@ public partial class SDKCamera : CameraMode
 
 	public virtual void CalculateObserverView( SDKPlayer player )
 	{
-		switch( player.ObserverMode )
+		switch ( player.ObserverMode )
 		{
 			case ObserverMode.Roaming:
 				CalculateRoamingCamView( player );
@@ -120,7 +120,7 @@ public partial class SDKCamera : CameraMode
 	{
 		var pGroundEntity = player.GroundEntity;
 		float flCurrentPlayerZ = player.Position.z;
-		float flCurrentPlayerViewOffsetZ = player.EyeLocalPosition.z;
+		float flCurrentPlayerViewOffsetZ = player.GetLocalEyePosition().z;
 
 		// Smooth out stair step ups
 		// NOTE: Don't want to do this when the ground entity is moving the player
@@ -189,8 +189,8 @@ public partial class SDKCamera : CameraMode
 			}
 
 			if ( Time.Now > shake.EndTime
-				|| shake.Duration <= 0 
-				|| shake.Amplitude <= 0 
+				|| shake.Duration <= 0
+				|| shake.Amplitude <= 0
 				|| shake.Frequency <= 0 )
 			{
 				ScreenShake.All.RemoveAt( i );
@@ -212,7 +212,7 @@ public partial class SDKCamera : CameraMode
 			fraction *= fraction;
 
 			var angle = Time.Now * freq;
-			if ( angle > float.MaxValue ) 
+			if ( angle > float.MaxValue )
 				angle = float.MaxValue;
 
 			fraction = fraction * MathF.Sin( angle );

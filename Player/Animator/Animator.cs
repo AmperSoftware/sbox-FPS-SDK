@@ -9,8 +9,8 @@ public partial class PlayerAnimator : BaseNetworkable
 
 	Rotation EyeRotation;
 
-	public void Simulate( SDKPlayer player ) 
-	{	
+	public void Simulate( SDKPlayer player )
+	{
 		Player = player;
 		Update();
 	}
@@ -39,7 +39,7 @@ public partial class PlayerAnimator : BaseNetworkable
 
 	public virtual void UpdateRotation()
 	{
-		if( LegShuffleEnabled )
+		if ( LegShuffleEnabled )
 		{
 			UpdateLegShuffle();
 			return;
@@ -55,8 +55,8 @@ public partial class PlayerAnimator : BaseNetworkable
 
 	public virtual void UpdateLookAt()
 	{
-		float pitch = -Player.EyeLocalRotation.Pitch();
-		float yaw = Player.EyeLocalRotation.Yaw();
+		float pitch = -Player.GetEyeRotation().Pitch();
+		float yaw = Player.GetEyeRotation().Yaw();
 		Vector3 lookAtPos = Player.EyePosition + Player.EyeRotation.Forward * 200;
 
 		SetAnimParameter( "body_pitch", pitch );

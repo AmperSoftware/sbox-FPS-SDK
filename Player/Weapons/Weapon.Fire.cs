@@ -34,7 +34,7 @@ partial class SDKWeapon
 	/// </summary>
 	public virtual void FireBullet( float damage, int seedOffset = 0 )
 	{
-		if ( IsServer ) FireBulletServer( damage, seedOffset );
+		if ( Game.IsServer ) FireBulletServer( damage, seedOffset );
 		FireBulletClient( damage, seedOffset );
 	}
 
@@ -154,7 +154,7 @@ partial class SDKWeapon
 
 		if ( drawTrace )
 		{
-			DebugOverlay.Line( tr.StartPosition, tr.EndPosition, IsServer ? Color.Yellow : Color.Green, time, true );
+			DebugOverlay.Line( tr.StartPosition, tr.EndPosition, Game.IsServer ? Color.Yellow : Color.Green, time, true );
 
 			DebugOverlay.Text(
 				$"Distance: {tr.Distance}\n" +

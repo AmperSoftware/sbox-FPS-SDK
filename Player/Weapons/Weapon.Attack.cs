@@ -46,7 +46,7 @@ partial class SDKWeapon
 		var curAttack = NextPrimaryAttackTime;
 		var deltaAttack = Time.Now - curAttack;
 
-		if ( deltaAttack < 0 || deltaAttack > Global.TickInterval )
+		if ( deltaAttack < 0 || deltaAttack > Game.TickInterval )
 		{
 			curAttack = Time.Now;
 		}
@@ -84,7 +84,7 @@ partial class SDKWeapon
 	/// </summary>
 	public virtual Vector3 GetAttackOrigin()
 	{
-		if ( Player == null ) 
+		if ( Player == null )
 			return Vector3.Zero;
 
 		return Player.GetAttackPosition();

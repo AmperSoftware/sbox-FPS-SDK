@@ -85,7 +85,7 @@ public partial class Timer : Entity
 	/// </summary>
 	public void Start()
 	{
-		if ( !IsServer )
+		if ( !Game.IsServer )
 			return;
 
 		if ( Paused )
@@ -97,7 +97,7 @@ public partial class Timer : Entity
 
 	public void Restart()
 	{
-		if ( !IsServer )
+		if ( !Game.IsServer )
 			return;
 
 		OnRestarted.Fire( this );
@@ -108,10 +108,10 @@ public partial class Timer : Entity
 
 	public void Pause()
 	{
-		if ( !IsServer )
+		if ( !Game.IsServer )
 			return;
 
-		if ( !Paused ) 
+		if ( !Paused )
 			OnPaused.Fire( this );
 
 		AbsoluteTime = GetRemainingTime();

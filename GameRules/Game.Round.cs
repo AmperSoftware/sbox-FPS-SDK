@@ -14,7 +14,7 @@ partial class SDKGame
 	/// </summary>
 	public void RestartRound()
 	{
-		if ( !IsServer ) 
+		if ( !Game.IsServer )
 			return;
 
 		IsWaitingForPlayers = false;

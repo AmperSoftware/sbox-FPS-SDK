@@ -77,7 +77,7 @@ partial class SDKPlayer
 		ActiveWeapon = weapon;
 		return true;
 	}
-	
+
 	public virtual bool EquipWeapon( SDKWeapon weapon, bool makeActive = false )
 	{
 		Game.AssertServer();
@@ -167,7 +167,7 @@ partial class SDKPlayer
 
 	public SDKViewModel GetViewModel( int index = 0 )
 	{
-		if ( !IsClient )
+		if ( !Game.IsClient )
 			return null;
 
 		if ( index < ViewModels.Count )
