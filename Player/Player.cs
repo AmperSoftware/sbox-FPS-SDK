@@ -8,8 +8,6 @@ namespace Amper.FPS;
 [Title( "Player" ), Icon( "emoji_people" )]
 public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtendedDamageInfo
 {
-	public virtual Vector3 EyePosition => Source1Extensions.GetEyePosition( this );
-	public virtual Rotation EyeRotation => Source1Extensions.GetEyeRotation( this );
 	public static SDKPlayer LocalPlayer => Game.LocalPawn as SDKPlayer;
 
 	public override void Spawn()
@@ -17,19 +15,12 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 		base.Spawn();
 
 		Animator = new PlayerAnimator();
-		CameraMode = new SDKCamera();
 
 		TeamNumber = 0;
 		LastObserverMode = ObserverMode.Chase;
 	}
 
 	[Net] public PlayerAnimator Animator { get; set; }
-	public CameraMode CameraMode
-	{
-		get => Components.Get<CameraMode>();
-		set => Components.Add( value );
-	}
-
 	[Net] public float MaxHealth { get; set; }
 
 	// These are from Entity, but they're not networked by default.
@@ -128,7 +119,7 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 		// Movement
 		//
 		Velocity = Vector3.Zero;
-		MoveType = SDKMoveType.Walk;
+		MoveType = MoveType.Walk;
 		FallVelocity = 0;
 		BaseVelocity = 0;
 		UpdateMaxSpeed();

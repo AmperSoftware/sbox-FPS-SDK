@@ -215,7 +215,7 @@ partial class GameMovement
 			// Only give this a try for first impact plane because you can get yourself stuck in an acute corner by jumping in place
 			//  and pressing forward and nobody was really using this bounce/reflection feature anyway...
 			if ( numplanes == 1 &&
-				Player.MoveType == SDKMoveType.Walk && 
+				Player.MoveType == MoveType.Walk && 
 				Player.GroundEntity == null )
 			{
 				for ( i = 0; i < numplanes; i++ )

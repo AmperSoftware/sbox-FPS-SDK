@@ -12,7 +12,7 @@ partial class SDKPlayer
 	public virtual bool CanPlayFootsteps()
 	{
 		// dont play footstep sounds if we're in noclip or in observer mode.
-		if ( MoveType == SDKMoveType.NoClip || MoveType == SDKMoveType.Observer )
+		if ( MoveType == MoveType.NoClip || MoveType == MoveType.Observer )
 			return false;
 
 		// always cool down footsteps for at least .3 seconds.

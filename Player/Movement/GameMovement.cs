@@ -100,16 +100,16 @@ public partial class GameMovement
 
 		switch ( Player.MoveType )
 		{
-			case SDKMoveType.Isometric:
-			case SDKMoveType.Walk:
+			case MoveType.Isometric:
+			case MoveType.Walk:
 				FullWalkMove();
 				break;
 
-			case SDKMoveType.NoClip:
+			case MoveType.NoClip:
 				FullNoClipMove( sv_noclip_speed, sv_noclip_accelerate );
 				break;
 
-			case SDKMoveType.Observer:
+			case MoveType.Observer:
 				FullObserverMove();
 				break;
 		}
@@ -305,7 +305,7 @@ public partial class GameMovement
 
 		// Was on ground, but now suddenly am not
 		if ( bMovingUpRapidly ||
-			(bMovingUp && Player.MoveType == SDKMoveType.Ladder) )
+			(bMovingUp && Player.MoveType == MoveType.Ladder) )
 		{
 			SetGroundEntity( null );
 		}
@@ -325,7 +325,7 @@ public partial class GameMovement
 					SetGroundEntity( null );
 
 					if ( Velocity.z > 0 &&
-						Player.MoveType != SDKMoveType.NoClip )
+						Player.MoveType != MoveType.NoClip )
 					{
 						Player.SurfaceFriction = 0.25f;
 					}
@@ -406,9 +406,9 @@ public partial class GameMovement
 
 	public virtual void CheckParameters()
 	{
-		if ( Player.MoveType != SDKMoveType.Isometric &&
-			Player.MoveType != SDKMoveType.NoClip &&
-			Player.MoveType != SDKMoveType.Observer )
+		if ( Player.MoveType != MoveType.Isometric &&
+			Player.MoveType != MoveType.NoClip &&
+			Player.MoveType != MoveType.Observer )
 		{
 			if ( !Player.CanMove() )
 			{
@@ -446,8 +446,8 @@ public partial class GameMovement
 			v_angle = v_angle + Player.ViewPunchAngle;
 
 			// Now adjust roll angle
-			if ( Player.MoveType != SDKMoveType.Isometric &&
-				 Player.MoveType != SDKMoveType.NoClip )
+			if ( Player.MoveType != MoveType.Isometric &&
+				 Player.MoveType != MoveType.NoClip )
 			{
 				// ViewAngles.Roll = CalcRoll( v_angle, Velocity, sv_rollangle, sv_rollspeed );
 			}

@@ -5,6 +5,9 @@ namespace Amper.FPS;
 
 partial class SDKPlayer
 {
+	[ClientInput] public Angles ViewAngles { get; set; }
+	[ClientInput] public Angles ActiveWeapon { get; set; }
+
 	//
 	// View Angles
 	//
@@ -29,7 +32,7 @@ partial class SDKPlayer
 	}
 
 	[Net, Predicted] public float MaxSpeed { get; set; }
-	[Net, Predicted] public new SDKMoveType MoveType { get; set; }
+	[Net, Predicted] public MoveType MoveType { get; set; }
 	public float SurfaceFriction { get; set; } = 1;
 	public Surface SurfaceData { get; set; }
 
@@ -196,7 +199,7 @@ public enum PlayerFlags
 /// Garry recently removed them from s&box natively so we need
 /// to keep the here manually.
 /// </summary>
-public enum SDKMoveType
+public enum MoveType
 {
 	None,
 	Isometric,

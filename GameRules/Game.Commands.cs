@@ -19,15 +19,15 @@ partial class SDKGame
 			return;
 
 		// If player is not in noclip, enable it.
-		if ( player.MoveType != SDKMoveType.NoClip )
+		if ( player.MoveType != MoveType.NoClip )
 		{
 			player.SetParent( null );
-			player.MoveType = SDKMoveType.NoClip;
+			player.MoveType = MoveType.NoClip;
 			Log.Info( $"noclip ON for {client.Name}" );
 			return;
 		}
 
-		player.MoveType = SDKMoveType.Walk;
+		player.MoveType = MoveType.Walk;
 		Log.Info( $"noclip OFF for {client.Name}" );
 	}
 
