@@ -7,9 +7,6 @@ namespace Amper.FPS;
 
 partial class SDKPlayer
 {
-	public IEnumerable<SDKWeapon> Weapons => Children.OfType<SDKWeapon>();
-	[Net, Predicted] public SDKWeapon ActiveWeapon { get; set; }
-	[Predicted] SDKWeapon LastActiveWeapon { get; set; }
 
 	/// <summary>
 	/// Can this player attack using their weapons?
