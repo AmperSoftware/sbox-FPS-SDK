@@ -5,26 +5,44 @@ namespace Amper.FPS;
 
 public struct RadiusDamageInfo
 {
-	public ExtendedDamageInfo DamageInfo { get; set; }
+	/// <summary>
+	/// Internal information about the dealt damage.
+	/// </summary>
+	public ExtendedDamageInfo DamageInfo;
+	/// <summary>
+	/// Entity that will receive 100% of the damage.
+	/// </summary>
 	public Entity Target;
+	/// <summary>
+	/// Entity that will ignore the radius damage application.
+	/// </summary>
 	public Entity Ignore;
+	/// <summary>
+	/// How far will this damage extend.
+	/// </summary>
 	public float Radius;
+	/// <summary>
+	/// How far will this damage extend when we're calculating damage to attacker.
+	/// </summary>
 	public float AttackerRadius;
 	/// <summary>
 	/// Multiplier value that defines how much damage, compared to base damage we should deal to entities
 	/// that are on the edge of the explosion radius.
 	/// </summary>
 	public float Falloff;
+	/// <summary>
+	/// Should we perform line os sight checks?
+	/// </summary>
 	public bool DoLosCheck;
 
-	public RadiusDamageInfo( ExtendedDamageInfo info, float radius, Entity ignore, float attackerRadius, Entity target, bool losCheck = true )
+	public RadiusDamageInfo( ExtendedDamageInfo info, float radius, Entity ignore, float attackerRadius, Entity target, float falloff = 0.5f, bool losCheck = true )
 	{
 		DamageInfo = info;
 		Radius = radius;
 		Ignore = ignore;
 		AttackerRadius = attackerRadius;
 		Target = target;
-		Falloff = SDKGame.Current.GetRadiusDamageFalloff();
+		Falloff = falloff;
 		DoLosCheck = losCheck;
 	}
 
