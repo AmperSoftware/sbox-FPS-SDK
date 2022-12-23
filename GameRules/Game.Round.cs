@@ -5,9 +5,9 @@ namespace Amper.FPS;
 
 partial class SDKGame
 {
-	public bool IsRoundStarting => State == GameState.PreRound;
-	public bool IsRoundActive => State == GameState.Gameplay;
-	public bool IsRoundEnded => State == GameState.RoundEnd;
+	public bool IsRoundStarting => State_ == EGameState.PreRound;
+	public bool IsRoundActive => State_ == EGameState.Gameplay;
+	public bool IsRoundEnded => State_ == EGameState.RoundEnd;
 
 	/// <summary>
 	/// Restart the round.
@@ -33,7 +33,7 @@ partial class SDKGame
 			StartWaitingForPlayers();
 		}
 
-		TransitionToState( GameState.PreRound );
+		TransitionToState( EGameState.PreRound );
 		OnRoundRestart();
 	}
 

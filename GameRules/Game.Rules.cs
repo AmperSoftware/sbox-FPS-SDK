@@ -6,7 +6,7 @@ namespace Amper.FPS;
 partial class SDKGame
 {
 	#region Teams
-	public virtual bool AreTeamChangesAllowed() => State != GameState.GameOver;
+	public virtual bool AreTeamChangesAllowed() => State_ != EGameState.GameOver;
 	/// <summary>
 	/// Is this player allowed to change their team?
 	/// </summary>

@@ -30,7 +30,7 @@ public static class TeamManager
 		public bool IsJoinable { get; set; }
 	}
 
-	public static Dictionary<int, TeamProperties> Teams { get; set; } = new();
+	public static Dictionary<int, TeamProperties> Teams = new();
 
 	public static void DeclareTeam( int number, string name, string title, Color color, bool playable = true, bool joinable = true )
 	{

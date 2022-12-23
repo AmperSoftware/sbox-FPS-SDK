@@ -4,13 +4,18 @@ using System.Linq;
 
 namespace Amper.FPS;
 
-partial class CombatCharacter
+partial class BaseCombatCharacter
 {
-	[Net] public IList<SDKWeapon> Weapons { get; set; }
-	[Net, Predicted] public SDKWeapon ActiveWeapon { get; set; }
-	[Predicted] SDKWeapon LastActiveWeapon { get; set; }
+	[Net] 
+	public IList<BaseCombatWeapon> Weapons { get; set; }
+	[Net, Predicted] 
+	public BaseCombatWeapon ActiveWeapon { get; set; }
+	[Predicted] 
+	BaseCombatWeapon LastActiveWeapon { get; set; }
+	[Net, Predicted]
+	public float NextAttackTime { get; set; }
 
-	public virtual bool SwitchToNextBestWeapon( SDKWeapon current )
+	public virtual bool SwitchToNextBestWeapon( BaseCombatWeapon current )
 	{
 		CBaseCombatWeapon* pNewWeapon = g_pGameRules->GetNextBestWeapon( this, pCurrent );
 
@@ -22,7 +27,7 @@ partial class CombatCharacter
 		return false;
 	}
 
-	public virtual SDKWeapon GetNextBestWeapon( SDKWeapon current )
+	public virtual BaseCombatWeapon GetNextBestWeapon( BaseCombatWeapon current )
 	{
 
 	}

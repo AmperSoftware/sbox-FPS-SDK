@@ -2,7 +2,7 @@ using Sandbox;
 
 namespace Amper.FPS;
 
-partial class CombatCharacter
+partial class BaseCombatCharacter
 {
 	public float StepSoundTime { get; set; }
 	bool NextFootRight { get; set; }

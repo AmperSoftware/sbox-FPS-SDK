@@ -3,33 +3,14 @@ using System.Linq;
 
 namespace Amper.FPS;
 
-public partial class SDKGame : GameManager
+public partial class GameRules : GameManager
 {
-	public new static SDKGame Current { get; set; }
+	public new static GameRules Current;
+	public GameMovement Movement = new();
 
-	public GameMovement Movement { get; set; }
-	public PostProcessingManager PostProcessingManager { get; set; }
-	public NavMeshExtended NavMesh { get; set; }
-
-	public SDKGame()
+	public GameRules()
 	{
 		Current = this;
-		Movement = new();
-
-		if ( Game.IsClient )
-		{
-			PostProcessingManager = new();
-		}
-
-		if ( Game.IsServer )
-		{
-			NavMesh = new();
-		}
-	}
-
-	public override void Spawn()
-	{
-		base.Spawn();
 
 		DeclareGameTeams();
 		SetupGameVariables();
@@ -38,15 +19,11 @@ public partial class SDKGame : GameManager
 	public override void FrameSimulate( IClient cl )
 	{
 		base.FrameSimulate( cl );
-		PostProcessingManager?.FrameSimulate();
 	}
 
-	public override void ClientSpawn()
+	public override void Simulate( IClient cl )
 	{
-		base.ClientSpawn();
-
-		DeclareGameTeams();
-		SetupGameVariables();
+		base.Simulate( cl );
 	}
 
 	public virtual void DeclareGameTeams()
@@ -74,7 +51,7 @@ public partial class SDKGame : GameManager
 
 	public virtual void Tick()
 	{
-		SimulateStates();
+		ThinkStates();
 
 		if ( Game.IsServer )
 		{
@@ -85,21 +62,9 @@ public partial class SDKGame : GameManager
 
 	public virtual void Upkeep()
 	{
-		NavMesh?.Update();
 	}
 
 
-	[ConVar.Client] public static bool cl_show_prediction_errors { get; set; }
-
-	public override void Simulate( IClient cl )
-	{
-		base.Simulate( cl );
-
-		if ( Game.IsClient && cl_show_prediction_errors && !Prediction.FirstTime )
-		{
-			DebugOverlay.ScreenText( $"Prediction Error! Rerunning ticks... (Tick: {Time.Tick})", new Vector2( Screen.Width - 400, 120 ), 0, Color.Red, .6f );
-		}
-	}
 
 	public override void ClientJoined( IClient cl )
 	{
@@ -125,8 +90,6 @@ public partial class SDKGame : GameManager
 	{
 		CalculateObjectives();
 		CreateStandardEntities();
-
-		// NavMesh?.PrecomputeNavMesh();
 	}
 
 	/// <summary>
@@ -198,8 +161,6 @@ public partial class SDKGame : GameManager
 	/// Player can technically respawn, but we must wait for certain condition to happen in order to 
 	/// be respawned. (i.e. respawn waves)
 	/// </summary>
-	/// <param name="player"></param>
-	/// <returns></returns>
 	public virtual bool AreRespawnConditionsMet( SDKPlayer player ) => true;
 	public bool HasPlayers() => All.OfType<SDKPlayer>().Any( x => x.IsReadyToPlay() );
 
@@ -223,7 +184,6 @@ public partial class SDKGame : GameManager
 			return;
 
 		// Update screen size in case of resolution change
-
 		ScreenSize = Screen.Size;
 		player.RenderHud( ScreenSize );
 	}
@@ -233,5 +193,15 @@ public partial class SDKGame : GameManager
 		Event.Run( "buildinput" );
 		Game.LocalPawn?.BuildInput();
 		LastCamera?.BuildInput();
+	}
+	[ConVar.Client] public static bool cl_show_prediction_errors { get; set; }
+	public override void Simualate( IClient cl )
+	{
+		base.Simulate( cl );
+
+		if ( Game.IsClient && cl_show_prediction_errors && !Prediction.FirstTime )
+		{
+			DebugOverlay.ScreenText( $"Prediction Error! Rerunning ticks... (Tick: {Time.Tick})", new Vector2( Screen.Width - 400, 120 ), 0, Color.Red, .6f );
+		}
 	}
 }

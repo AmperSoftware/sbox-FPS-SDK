@@ -6,18 +6,22 @@ namespace Amper.FPS;
 /// This should contain all of the combat entry points / functionality 
 /// that are common between NPCs and players
 /// </summary>
-public abstract partial class CombatCharacter : AnimatedEntity, IHasMaxHealth
+public abstract partial class BaseCombatCharacter : AnimatedEntity, IHasMaxHealth
 {
 	[Net, Predicted]
 	public float MaxHealth { get; set; }
-	IntervalTimer AliveTimer = new();
+	[Net]
+	public TimeSince TimeSinceSpawned { get; set; }
+	[Net, Predicted]
+	public MoveType MoveType { get; set; }
+	public bool IsAlive => LifeState == LifeState.Alive;
 
 	public override void Spawn()
 	{
 		base.Spawn();
 
 		// SetBlocksLOS( false );
-		AliveTimer.Start();
+		TimeSinceSpawned = 0;
 
 		// not standing on a nav area yet
 		ClearLastKnownArea();

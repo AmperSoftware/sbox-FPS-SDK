@@ -3,12 +3,13 @@ using System.Linq;
 
 namespace Amper.FPS;
 
-partial class SDKPlayer
+partial class BasePlayer
 {
 	/// <summary>
 	/// This is called before all the calculations are made. Even if the damage doesn't go through!
 	/// </summary>
-	public virtual void OnAttackedBy( Entity attacker, ExtendedDamageInfo info ) { }
+	public virtual void OnPreTakeDamage( Entity attacker, ExtendedDamageInfo info ) { }
+	public virtual void OnTakeDamageReaction( ExtendedDamageInfo info ) { }
 
 	/// <summary>
 	/// When the entity takes damage, this function gets called.
@@ -22,7 +23,7 @@ partial class SDKPlayer
 			return;
 
 		// We have been attacked by someone.
-		OnAttackedBy( info.Attacker, info );
+		OnPreTakeDamage( info.Attacker, info );
 
 		// Check if player can receive damage from attacker.
 		var attacker = info.Attacker;
@@ -108,11 +109,6 @@ partial class SDKPlayer
 	}
 
 	/// <summary>
-	/// If mod requires us to be pushed by the damage, apply the impulse here.
-	/// </summary>
-	public virtual void ApplyPushFromDamage( ExtendedDamageInfo info ) { }
-
-	/// <summary>
 	/// Modify how player accepts damage.
 	/// </summary>
 	public virtual void ApplyOnPlayerDamageModifyRules( ref ExtendedDamageInfo info ) { }
@@ -147,26 +143,6 @@ partial class SDKPlayer
 	/// </summary>
 	public virtual bool ShouldBleedFromDamage( ExtendedDamageInfo info ) => true;
 
-	/// <summary>
-	/// How will the player react to taking damage? By default this applies abs velocity to the player,
-	/// kicks the view of the player and makes it flinch.
-	/// </summary>
-	public virtual void OnTakeDamageReaction( ExtendedDamageInfo info )
-	{
-		// Apply velocity to the player from the damage.
-		if ( ShouldApplyPushFromDamage( info ) )
-			ApplyPushFromDamage( info );
-
-		// Apply view kick.
-		if ( ShouldApplyViewPunchFromDamage( info ) )
-			ApplyViewPunchFromDamage( info );
-
-		if ( ShouldFlinchFromDamage( info ) )
-			PlayFlinchFromDamage( info );
-
-		if ( ShouldBleedFromDamage( info ) )
-			SendBloodDispatchRPC( info );
-	}
 
 	/// <summary>
 	/// Play flinch animation on the player from the damage type.

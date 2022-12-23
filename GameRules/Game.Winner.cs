@@ -16,8 +16,8 @@ partial class SDKGame
 	public void DeclareWinner( int winner, int reason )
 	{
 		// If we're already in humiliation, don't do anything.
-		if ( State == GameState.RoundEnd ) return;
-		TransitionToState( GameState.RoundEnd );
+		if ( State_ == EGameState.RoundEnd ) return;
+		TransitionToState( EGameState.RoundEnd );
 
 		Winner = winner;
 		WinReason = reason;
