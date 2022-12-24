@@ -44,18 +44,16 @@ public partial class GameRules : GameManager
 		if ( Time.Now < NextTickTime )
 			return;
 
-		Tick();
-
+		Think();
 		NextTickTime = Time.Now + 0.1f;
 	}
 
-	public virtual void Tick()
+	public virtual void Think()
 	{
 		ThinkStates();
 
 		if ( Game.IsServer )
 		{
-			CheckWaitingForPlayers();
 			UpdateAllClientsData();
 		}
 	}
@@ -64,16 +62,14 @@ public partial class GameRules : GameManager
 	{
 	}
 
-
+	public virtual BasePlayer CreatePlayerForClient( IClient cl ) => new BasePlayer();
 
 	public override void ClientJoined( IClient cl )
 	{
 		var player = CreatePlayerForClient( cl );
 		cl.Pawn = player;
-		player.Respawn();
 	}
 
-	public virtual SDKPlayer CreatePlayerForClient( IClient cl ) => new SDKPlayer();
 
 	public override void ClientDisconnect( IClient client, NetworkDisconnectionReason reason )
 	{
@@ -88,40 +84,8 @@ public partial class GameRules : GameManager
 
 	public override void PostLevelLoaded()
 	{
-		CalculateObjectives();
 		CreateStandardEntities();
 	}
-
-	/// <summary>
-	/// Amount of seconds until this player is able to respawn.
-	/// </summary>
-	/// <param name="player"></param>
-	public virtual float GetPlayerRespawnTime( SDKPlayer player ) => 0;
-
-	/// <summary>
-	/// This player was just killed.
-	/// </summary>
-	/// <param name="player"></param>
-	/// <param name="info"></param>
-	public virtual void PlayerDeath( SDKPlayer player, ExtendedDamageInfo info ) { }
-
-	/// <summary>
-	/// This player was just hurt.
-	/// </summary>
-	/// <param name="player"></param>
-	/// <param name="info"></param>
-	public virtual void PlayerHurt( SDKPlayer player, ExtendedDamageInfo info ) { }
-
-	/// <summary>
-	/// On player respawned
-	/// </summary>
-	/// <param name="player"></param>
-	public virtual void PlayerRespawn( SDKPlayer player ) { }
-
-	/// <summary>
-	/// On player respawned
-	/// </summary>
-	public virtual void PlayerChangeTeam( SDKPlayer player, int team ) { }
 
 	/// <summary>
 	/// Create standard game entities.
@@ -161,20 +125,9 @@ public partial class GameRules : GameManager
 	/// Player can technically respawn, but we must wait for certain condition to happen in order to 
 	/// be respawned. (i.e. respawn waves)
 	/// </summary>
-	public virtual bool AreRespawnConditionsMet( SDKPlayer player ) => true;
 	public bool HasPlayers() => All.OfType<SDKPlayer>().Any( x => x.IsReadyToPlay() );
 
-	public virtual float DamageForce( Vector3 size, float damage, float scale )
-	{
-		float force = damage * ((48 * 48 * 82) / (size.x * size.y * size.z)) * scale;
-
-		if ( force > 1000 )
-			force = 1000;
-
-		return force;
-	}
-
-	public Vector2 ScreenSize { get; private set; }
+	public Vector2 ScreenSize;
 	public override void RenderHud()
 	{
 		base.RenderHud();
@@ -192,10 +145,11 @@ public partial class GameRules : GameManager
 	{
 		Event.Run( "buildinput" );
 		Game.LocalPawn?.BuildInput();
-		LastCamera?.BuildInput();
+	
 	}
+
 	[ConVar.Client] public static bool cl_show_prediction_errors { get; set; }
-	public override void Simualate( IClient cl )
+	void Simualate( IClient cl )
 	{
 		base.Simulate( cl );
 

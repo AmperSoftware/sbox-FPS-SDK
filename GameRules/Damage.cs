@@ -10,6 +10,10 @@ public struct RadiusDamageInfo
 	/// </summary>
 	public ExtendedDamageInfo DamageInfo;
 	/// <summary>
+	/// Point in space from which we're dealing radius damage.
+	/// </summary>
+	public Vector3 Origin;
+	/// <summary>
 	/// Entity that will receive 100% of the damage.
 	/// </summary>
 	public Entity Target;
@@ -33,55 +37,90 @@ public struct RadiusDamageInfo
 	/// <summary>
 	/// Should we perform line os sight checks?
 	/// </summary>
-	public bool DoLosCheck;
+	public bool DoLineOfSightCheck;
 
-	public RadiusDamageInfo( ExtendedDamageInfo info, float radius, Entity ignore, float attackerRadius, Entity target, float falloff = 0.5f, bool losCheck = true )
+	public RadiusDamageInfo( ExtendedDamageInfo info, Vector3 origin, float radius, Entity ignore, Entity target, float attackerRadius = -1, float falloff = 0.5f, bool losCheck = true )
 	{
 		DamageInfo = info;
+		Origin = origin;
 		Radius = radius;
 		Ignore = ignore;
-		AttackerRadius = attackerRadius;
 		Target = target;
 		Falloff = falloff;
-		DoLosCheck = losCheck;
+		AttackerRadius = attackerRadius;
+		DoLineOfSightCheck = losCheck;
 	}
 
-	public void ApplyToEntity( Entity entity )
+	public bool IsLineOfSightClear( Entity entity, Vector3 targetPos )
 	{
-		// we're ignoring this entity.
-		if ( entity == Ignore )
-			return;
-
-		//
-		// Check line of sight between explosion and the entity.
-		//
-
-		var dmgPos = DamageInfo.HitPosition;
-		var eyePos = entity.GetEyePosition();
-
-		var tr = Trace.Ray( dmgPos, eyePos )
+		var tr = Trace.Ray( Origin, targetPos )
 			.WorldOnly()
 			.Ignore( Ignore )
 			.Ignore( entity )
 			.Run();
 
-		// If we hit something, we're blocked by world.
-		if ( DoLosCheck && tr.Hit )
+		return tr.Fraction >= 1;
+	}
+
+	public bool IsLineOfSightClear( Entity entity )
+	{
+		if ( IsLineOfSightClear( entity, entity.Position ) )
+			return true;
+
+		if ( IsLineOfSightClear( entity, entity.WorldSpaceBounds.Center ) )
+			return true;
+
+		if ( IsLineOfSightClear( entity, entity.GetEyePosition() ) )
+			return true;
+
+		return false;
+	}
+
+
+	/// <summary>
+	/// Apply damage in radius. I.e. a explosion.
+	/// </summary>
+	public void Apply()
+	{
+		if ( sv_debug_draw_radius_damage )
+			DebugDrawRadius();
+
+		if ( Radius > 0 )
+		{
+			var entities = Entity.FindInSphere( Origin, Radius );
+			foreach ( var entity in entities )
+				ApplyToEntity( entity );
+		}
+	}
+
+	public void ApplyToEntity( Entity entity )
+	{
+		// We're ignoring this entity.
+		if ( entity == Ignore )
 			return;
+
+		if ( DoLineOfSightCheck )
+		{
+			// Check line of sight between explosion origin and the entity.
+			if ( !IsLineOfSightClear( entity ) )
+				return;
+		}
 
 		//
 		// Apply falloff based on distance.
 		//
 
 		var distance = 0f;
+		var vecEntEyePos = entity.GetEyePosition();
+		var vecEntCenter = entity.WorldSpaceBounds.Center;
 
-		// if the entity we're trying to damage is not our main target, calculate distanceToEntity
-		// main target will take 100% damage.
+		// If the entity we're trying to damage is not our main target, calculate distanceToEntity.
+		// Main target will take 100% damage.
 		if ( Target != entity )
 		{
 			// Use whichever is closer, absorigin or worldspacecenter
-			float toWorldSpaceCenter = (DamageInfo.HitPosition - entity.WorldSpaceBounds.Center).Length;
-			float toOrigin = (DamageInfo.HitPosition - entity.Position).Length;
+			float toWorldSpaceCenter = (Origin - entity.WorldSpaceBounds.Center).Length;
+			float toOrigin = (Origin - entity.Position).Length;
 
 			distance = Math.Min( toWorldSpaceCenter, toOrigin );
 		}
@@ -105,17 +144,18 @@ public struct RadiusDamageInfo
 		// Adjust damage info
 		//
 
-		var dir = (eyePos - dmgPos).Normal;
-		var force = SDKGame.Current.CalculateForceFromDamage( dir, adjustedDamage );
+		var vecDir = (vecEntEyePos - Origin).Normal;
+		var force = GameRules.Current.CalculateForceFromDamage( vecDir, adjustedDamage );
 
 		var info = DamageInfo
-			.UsingTraceResult( tr )
+			.WithOriginPosition( Origin )
+			.WithHitPosition( vecEntCenter )
 			.WithDamage( adjustedDamage )
 			.WithForce( force );
 
 		entity.TakeDamage( info );
 
-		if( SDKGame.sv_debug_draw_radius_damage )
+		if ( sv_debug_draw_radius_damage )
 		{
 			DebugOverlay.Sphere( entity.Position, 5, Color.Magenta, 5, true );
 			DebugOverlay.Line( DamageInfo.HitPosition, entity.Position, Color.Magenta, 5, true );
@@ -158,41 +198,27 @@ public struct RadiusDamageInfo
 
 		}
 	}
+
+	[ConVar.Replicated] public static bool sv_debug_draw_radius_damage { get; set; }
 }
 
-partial class SDKGame
+
+partial class GameRules
 {
 	/// <summary>
-	/// Apply damage in radius. I.e. a explosion.
-	/// </summary>
-	public void ApplyRadiusDamage( RadiusDamageInfo info )
-	{
-		if ( sv_debug_draw_radius_damage )
-			info.DebugDrawRadius();
-
-		if ( info.Radius > 0 )
-		{
-			var entities = FindInSphere( info.DamageInfo.HitPosition, info.Radius );
-			foreach ( var entity in entities )
-			{
-				info.ApplyToEntity( entity );
-			}
-		}
-	}
-
-	/// <summary>
 	/// Calculates how much force the attack will inflict, based on the amount of damage.
+	/// This is used for physics props.
 	/// </summary>
 	public virtual Vector3 CalculateForceFromDamage( Vector3 direction, float damage, float scale = 1 )
 	{
 		var force = direction.Normal;
 		force *= damage;
 		force *= scale;
-		force *= sv_damageforce_scale;
+		force *= sv_damage_force_scale;
 		return force;
 	}
 
-	[ConVar.Replicated] public static bool sv_debug_draw_radius_damage { get; set; }
+	[ConVar.Replicated] public static float sv_damage_force_scale { get; set; } = 1;
 
 	/// <summary>
 	/// Modifies dealt damage using global game rules. This is applied to all taken damage,

@@ -19,12 +19,6 @@ public class ColorFormattedString : Panel
 		return this;
 	}
 
-	[Obsolete( "Use .AddColoredText" )]
-	public ColorFormattedString AddText( string text, string color )
-	{
-		return AddColoredText( text, color );
-	}
-
 	public ColorFormattedString AddColoredText( string text, string color )
 	{
 		var label = Add.Label( text );

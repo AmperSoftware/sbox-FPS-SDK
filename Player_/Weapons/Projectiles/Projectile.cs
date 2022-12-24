@@ -2,7 +2,7 @@
 
 namespace Amper.FPS;
 
-public abstract partial class Projectile : ModelEntity, ITeam
+public abstract partial class Projectile : ModelEntity, IHasTeamNumber
 {
 	[Net] public int TeamNumber { get; set; }
 	[Net] public ExtendedDamageInfo DamageInfo { get; set; }
@@ -136,7 +136,6 @@ public abstract partial class Projectile : ModelEntity, ITeam
 	public virtual void Explode()
 	{
 		Game.AssertServer();
-
 		Explode( Position );
 	}
 
@@ -192,7 +191,7 @@ public abstract partial class Projectile : ModelEntity, ITeam
 
 	public virtual bool IsDestroyable => false;
 
-	public static T Create<T>(Vector3 origin, Vector3 velocity, Entity owner, Entity launcher, ExtendedDamageInfo info) where T : Projectile, new()
+	public static T Create<T>( Vector3 origin, Vector3 velocity, Entity owner, Entity launcher, ExtendedDamageInfo info ) where T : Projectile, new()
 	{
 		T ent = new();
 
@@ -204,7 +203,7 @@ public abstract partial class Projectile : ModelEntity, ITeam
 		ent.DamageInfo = info;
 
 		// Set the projectile's team to owner's team if it has a team.
-		if ( owner is ITeam ownerTeam )
+		if ( owner is IHasTeamNumber ownerTeam )
 			ent.TeamNumber = ownerTeam.TeamNumber;
 
 		return ent;

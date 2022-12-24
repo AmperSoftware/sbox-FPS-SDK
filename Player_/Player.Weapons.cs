@@ -7,7 +7,6 @@ namespace Amper.FPS;
 
 partial class SDKPlayer
 {
-
 	/// <summary>
 	/// Can this player attack using their weapons?
 	/// </summary>

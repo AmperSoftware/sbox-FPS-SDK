@@ -5,16 +5,16 @@ using System.Linq;
 
 namespace Amper.FPS;
 
-partial class SDKGame
+partial class GameRules
 {
-	protected Dictionary<int, SDKSpawnPoint> LastSpawnPoint { get; set; } = new();
+	protected Dictionary<int, PlayerSpawnPoint> LastSpawnPoint = new();
 
 	/// <summary>
 	/// Try to place the player on the spawn point.	This functions returns true if nothing occupies the player's
 	/// space and they can safely spawn without getting stuck. `transform` will contain the transform data of the position where the 
 	/// player would've spawned.
 	/// </summary>
-	public virtual bool TryFitOnSpawnpoint( SDKPlayer player, Entity spawnPoint, out Transform transform )
+	public virtual bool TryFitOnSpawnpoint( BasePlayer player, Entity spawnPoint, out Transform transform )
 	{
 		transform = spawnPoint.Transform;
 
@@ -49,7 +49,7 @@ partial class SDKGame
 		return !tr.Hit;
 	}
 
-	public virtual Trace SetupSpawnTrace( SDKPlayer player, Vector3 from, Vector3 to, Vector3 mins, Vector3 maxs )
+	public virtual Trace SetupSpawnTrace( BasePlayer player, Vector3 from, Vector3 to, Vector3 mins, Vector3 maxs )
 	{
 		return Trace.Ray( from, to )
 			.Size( mins, maxs )
@@ -60,13 +60,13 @@ partial class SDKGame
 			.Ignore( player );
 	}
 
-	public virtual void FindAndMovePlayerToSpawnPoint( SDKPlayer player )
+	public virtual void FindAndMovePlayerToSpawnPoint( BasePlayer player )
 	{
 		// try to find a valid spawn point for this player
 		var team = player.TeamNumber;
 
 		// get all available spawn points in the list.
-		var points = All.OfType<SDKSpawnPoint>().ToList();
+		var points = All.OfType<PlayerSpawnPoint>().ToList();
 		var count = points.Count;
 
 		//
@@ -78,7 +78,7 @@ partial class SDKGame
 		{
 			// we'll use this if we can't find any point that could place us
 			// without getting stuck
-			SDKSpawnPoint firstEligiblePoint = null;
+			PlayerSpawnPoint firstEligiblePoint = null;
 
 			// figuring out at which point we should start.
 			var index = -1;

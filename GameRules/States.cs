@@ -16,7 +16,7 @@ partial class GameRules
 		State = state;
 	}
 
-	void UpdateState()
+	void ThinkStates()
 	{
 		if ( LastState != State )
 		{

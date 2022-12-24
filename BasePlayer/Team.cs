@@ -1,11 +1,9 @@
 using Sandbox;
-using TFS2.Libraries.FPS.Util;
 
 namespace Amper.FPS;
 
-partial class SDKPlayer : IHasTeamNumber
+partial class BasePlayer
 {
-	[Net] public int TeamNumber { get; set; }
 	[Net] public int TeamChanges { get; set; }
 
 	public virtual bool ChangeTeam( int team, bool autoTeam, bool silent, bool autobalance = false )
@@ -17,11 +15,11 @@ partial class SDKPlayer : IHasTeamNumber
 			return false;
 
 		// The player is not allowed to change their team right now.
-		if ( !SDKGame.Current.CanPlayerChangeTeamTo( this, team ) )
+		if ( !GameRules.Current.CanPlayerChangeTeamTo( this, team ) )
 			return false;
 
 		// see if gamemode wants to override our team with something else.
-		team = SDKGame.Current.GetTeamAssignmentOverride( this, team, autobalance );
+		team = GameRules.Current.GetTeamAssignmentOverride( this, team, autobalance );
 
 		// cant change team if we're already on this team.
 		if ( TeamNumber == team ) 

@@ -1,5 +1,6 @@
 using Sandbox;
 using System.Linq;
+using TFS2.Libraries.FPS.Util;
 
 namespace Amper.FPS;
 
@@ -79,7 +80,7 @@ partial class SDKGame
 		// If friendly fire is turned off, then we can't damage teammates.
 		if ( !mp_friendly_fire )
 		{
-			if ( ITeam.IsSame( victim, attacker ) )
+			if ( IHasTeamNumber.IsSame( victim, attacker ) )
 				return false;
 		}
 

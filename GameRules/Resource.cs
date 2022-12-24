@@ -2,22 +2,21 @@
 
 namespace Amper.FPS;
 
-partial class SDKGame
+partial class GameRules
 {
 	public void UpdateAllClientsData()
 	{
 		var clients = Game.Clients;
 		foreach ( var client in clients )
 		{
-			var pawn = client.Pawn as SDKPlayer;
-			if ( pawn == null )
+			if ( client.Pawn is not BasePlayer pawn )
 				continue;
 
 			UpdateClientData( client, pawn );
 		}
 	}
 
-	public virtual void UpdateClientData( IClient client, SDKPlayer player )
+	public virtual void UpdateClientData( IClient client, BasePlayer player )
 	{
 		client.SetValue( "f_health", player.Health );
 		client.SetValue( "f_maxhealth", player.MaxHealth );

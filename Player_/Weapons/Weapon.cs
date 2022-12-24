@@ -1,9 +1,10 @@
 ﻿using Sandbox;
 using System;
+using TFS2.Libraries.FPS.Util;
 
 namespace Amper.FPS;
 
-public partial class SDKWeapon : AnimatedEntity, ITeam
+public partial class SDKWeapon : AnimatedEntity, IHasTeamNumber
 {
 	public SDKPlayer Player => Owner as SDKPlayer;
 

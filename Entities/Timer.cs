@@ -7,6 +7,7 @@ namespace Amper.FPS;
 /// <summary>
 /// Timer entity, used to count down the time for the purposes of a gamemode.
 /// </summary>
+[Obsolete( "Do not use" )]
 public partial class Timer : Entity
 {
 	public new static List<Timer> All { get; set; } = new();

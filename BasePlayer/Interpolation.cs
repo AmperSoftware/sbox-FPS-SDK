@@ -3,7 +3,7 @@ using System;
 
 namespace Amper.FPS;
 
-partial class SDKPlayer
+partial class BasePlayer
 {
 	[ConVar.Client] public static bool cl_use_sbox_player_interpolation { get; set; }
 

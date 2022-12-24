@@ -3,14 +3,13 @@ using System.Collections.Generic;
 
 namespace Amper.FPS;
 
-partial class SDKGame
+partial class GameRules
 {
 	[Net] public IDictionary<int, int> Score { get; set; }
 	[Net] public int TotalRoundsPlayed { get; protected set; }
 
 	public void RestartGame()
 	{
-		StopWaitingForPlayers();
 		Score.Clear();
 		TotalRoundsPlayed = 0;
 
