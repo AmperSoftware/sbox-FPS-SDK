@@ -1,6 +1,9 @@
-﻿using Sandbox;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Sandbox;
 
 namespace Amper.FPS;
 
@@ -18,15 +21,15 @@ public partial class ScreenShake : BaseNetworkable
 
 		foreach ( var client in Game.Clients )
 		{
-			var pawn = client.Pawn as Entity;
+			var pawn = client.Pawn;
 			
-			if ( !pawn.IsValid() )
+			if ( !pawn.IsValid() || pawn is not SDKPlayer ply )
 				continue;
 
-			if ( !airshake && command == ShakeCommand.Start && !pawn.GroundEntity.IsValid() )
+			if ( !airshake && command == ShakeCommand.Start && !ply.GroundEntity.IsValid() )
 				continue;
 
-			var localAmplitude = ComputeShakeAmplitude( center, pawn.WorldSpaceBounds.Center, amplitude, radius );
+			var localAmplitude = ComputeShakeAmplitude( center, ply.WorldSpaceBounds.Center, amplitude, radius );
 
 			if ( localAmplitude < 0 )
 				continue;

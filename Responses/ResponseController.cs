@@ -7,7 +7,7 @@ namespace Amper.FPS;
 
 public interface IResponseSpeaker<Concepts, Contexts> where Concepts : Enum where Contexts : Enum
 {
-	public ResponseController<Concepts, Contexts> ResponseController { get; }
+	public ResponseController<Concepts, Contexts> ResponseController { get; set; }
 	public void SpeakConceptIfAllowed( Concepts concept );
 	public void ModifyResponseCriteria( ResponseCriteria<Contexts> criteriaSet );
 	public void PlayResponse( ResponseController<Concepts, Contexts>.Response response );

@@ -4,15 +4,14 @@ using System;
 
 namespace Amper.FPS;
 
-public static class SDKExtensions
+public static class Source1Extensions
 {
 	public static Vector3 GetEyePosition( this IEntity ent ) => ent.AimRay.Position;
 	public static Vector3 GetEyeForward( this IEntity ent ) => ent.AimRay.Forward;
-	public static Rotation GetEyeRotation( this IEntity ent ) => Rotation.LookAt( ent.AimRay.Forward );
+	public static Rotation GetEyeRotation( this IEntity ent ) => Rotation.LookAt(ent.AimRay.Forward);
 
-	public static Vector3 GetLocalEyePosition( this IEntity ent ) => ent.Transform.PointToLocal( ent.GetEyePosition() );
+	public static Vector3 GetLocalEyePosition( this IEntity ent ) => ent.Transform.PointToLocal(ent.GetEyePosition());
 	public static Rotation GetLocalEyeRotation( this IEntity ent ) => ent.Transform.RotationToLocal( ent.GetEyeRotation() );
-
 	public async static void Reset( this DoorEntity door )
 	{
 		if ( !Game.IsServer ) return;

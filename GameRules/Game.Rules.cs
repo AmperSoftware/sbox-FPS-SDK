@@ -1,13 +1,12 @@
 using Sandbox;
 using System.Linq;
-using TFS2.Libraries.FPS.Util;
 
 namespace Amper.FPS;
 
 partial class SDKGame
 {
 	#region Teams
-	public virtual bool AreTeamChangesAllowed() => State_ != EGameState.GameOver;
+	public virtual bool AreTeamChangesAllowed() => State != GameState.GameOver;
 	/// <summary>
 	/// Is this player allowed to change their team?
 	/// </summary>
@@ -80,7 +79,7 @@ partial class SDKGame
 		// If friendly fire is turned off, then we can't damage teammates.
 		if ( !mp_friendly_fire )
 		{
-			if ( IHasTeamNumber.IsSame( victim, attacker ) )
+			if ( ITeam.IsSame( victim, attacker ) )
 				return false;
 		}
 

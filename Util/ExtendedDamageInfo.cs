@@ -1,63 +1,41 @@
 ﻿using Sandbox;
+using System;
 using System.Collections.Generic;
 
 namespace Amper.FPS;
 
 public struct ExtendedDamageInfo
 {
-	/// <summary>
-	/// Attacker of the inflicted damage.
-	/// </summary>
-	public Entity Attacker;
-	/// <summary>
-	/// Entity that inflicted damage. (building or a projectile)
-	/// </summary>
-	public Entity Inflictor;
-	/// <summary>
-	/// Weapon that caused the inflicted weapon.
-	/// </summary>
-	public Entity Weapon;
-	/// <summary>
-	/// Force which is applied by damage.
-	/// </summary>
-	public Vector3 Force;
-	/// <summary>
-	/// How much damage we have inflicted.
-	/// </summary>
-	public float Damage;
-	/// <summary>
-	/// Custom tags applied by this damage.
-	/// </summary>
-	public HashSet<string> Tags;
-	/// <summary>
-	/// Plysics body-receiver of the damage.
-	/// </summary>
-	public PhysicsBody Body;
-	/// <summary>
-	/// Hitbox that received 
-	/// </summary>
-	public Hitbox Hitbox; 
-	/// <summary>
-	/// Index of the receiving bone.
-	/// </summary>
-	public int BoneIndex; 
+	public Entity Attacker { get; set; }
+	public Entity Inflictor { get; set; } 
+	public Entity Weapon { get; set; } 
+	public Vector3 Force { get; set; } 
+	public float Damage { get; set; }
+	public IReadOnlyCollection<string> Tags => GetTags();
+	private HashSet<string> _tags { get; set; }
+	public PhysicsBody Body { get; set; } 
+	public Hitbox Hitbox { get; set; } 
+	public int BoneIndex { get; set; } 
+	public int KillType { get; set; }
 	/// <summary>
 	/// The position at which this damage has impacted with the victim. I.e. position that bullet has 
 	/// hit in the victim's hitboxes. The blood at the target will appear at this position.
 	/// </summary>
-	public Vector3 HitPosition;
+	public Vector3 HitPosition { get; set; }
 	/// <summary>
 	/// The position from which this damage originated. I.e. the origin of an explosion that damaged the player.
 	/// </summary>
-	public Vector3 OriginPosition;
+	public Vector3 OriginPosition { get; set; }
 	/// <summary>
 	/// The position which we will report to the client that received damage.
 	/// </summary>
-	public Vector3 ReportPosition;
+	public Vector3 ReportPosition { get; set; }
 
 	public static ExtendedDamageInfo Create( float damage )
 	{
-		return new ExtendedDamageInfo { Damage = damage };
+		ExtendedDamageInfo result = default;
+		result.Damage = damage;
+		return result;
 	}
 
 	public ExtendedDamageInfo WithAttacker( Entity attacker )
@@ -78,21 +56,88 @@ public struct ExtendedDamageInfo
 		return this;
 	}
 
-	public ExtendedDamageInfo WithTag( string tag )
+	public ExtendedDamageInfo WithFlags( HashSet<string> flags ) => WithTags( flags );
+
+	[Obsolete( "Temporary fix for pain month (2022/12) issues, switch to tags instead!" )]
+	public ExtendedDamageInfo WithFlag( string flag )
 	{
-		Tags.Add( tag );
+		_tags.Add( flag );
 		return this;
 	}
 
-	public ExtendedDamageInfo WithoutTag( string tag )
+	[Obsolete( "Temporary fix for pain month (2022/12) issues, switch to tags instead!" )]
+	public ExtendedDamageInfo WithoutFlag( string flag )
 	{
-		Tags.Remove( tag );
+		_tags.Add( flag );
 		return this;
 	}
 
-	public bool HasTag( string tag )
+	public ExtendedDamageInfo SetTags(HashSet<string> tags)
 	{
-		return Tags.Contains( tag );
+		_tags = tags;
+
+		return this;
+	}
+	public ExtendedDamageInfo SetTags(IEnumerable<string> tags)
+	{
+		HashSet<string> newTags = new();
+		foreach(var tag in tags)
+		{
+			newTags.Add( tag );
+		}
+		_tags = newTags;
+
+		return this;
+	}
+	public ExtendedDamageInfo WithTags(IEnumerable<string> tags)
+	{
+		foreach ( var tag in tags )
+		{
+			_tags.Add( tag );
+		}
+
+		return this;
+	}
+	public ExtendedDamageInfo WithTags( params string[] tags ) => WithTags( tags );
+
+	public ExtendedDamageInfo WithTag(string tag)
+	{
+		_tags.Add( tag );
+
+		return this;
+	}
+
+	public ExtendedDamageInfo WithoutTags( IEnumerable<string> tags)
+	{
+		foreach ( var tag in tags )
+		{
+			_tags.Remove( tag );
+		}
+
+		return this;
+	}
+	public ExtendedDamageInfo WithoutTags( params string[] tags ) => WithoutTags( tags );
+
+	public ExtendedDamageInfo WithoutTag(string tag)
+	{
+		_tags.Remove( tag );
+		return this;
+	}
+
+	public bool HasTag(string tag)
+	{
+		return _tags.Contains( tag );
+	}
+
+	private IReadOnlyCollection<string> GetTags()
+	{
+		List<string> tags = new();
+		foreach(var tag in _tags)
+		{
+			tags.Add( tag );
+		}
+
+		return tags;
 	}
 
 	public ExtendedDamageInfo WithHitBody( PhysicsBody body )
@@ -119,6 +164,10 @@ public struct ExtendedDamageInfo
 		return this;
 	}
 
+	/// <summary>
+	/// The position at which this damage has impacted with the victim. I.e. position that bullet has 
+	/// hit in the victim's hitboxes. The blood at the target will appear at this position.
+	/// </summary>
 	public ExtendedDamageInfo WithHitPosition( Vector3 position )
 	{
 		HitPosition = position;
@@ -157,6 +206,13 @@ public struct ExtendedDamageInfo
 		return this;
 	}
 
+	[Obsolete( "No longer needed as of pain month (2022/12), use tags instead!" )]
+	public ExtendedDamageInfo WithCustomKillType( int killType )
+	{
+		_tags.Add( $"legacy_custom_{killType}");
+		return this;
+	}
+
 	public ExtendedDamageInfo UsingTraceResult( TraceResult result )
 	{
 		HitPosition = result.EndPosition;
@@ -182,8 +238,6 @@ public struct ExtendedDamageInfo
 
 		return info;
 	}
-
-	public static implicit operator DamageInfo( ExtendedDamageInfo info ) => info.ToDamageInfo();
 }
 
 public interface IAcceptsExtendedDamageInfo

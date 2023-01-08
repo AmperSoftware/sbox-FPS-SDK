@@ -82,7 +82,7 @@ public static partial class Util
 
 	private static float fsel( float c, float x, float y ) => c >= 0 ? x : y;
 
-	// Hermite basis function for smooth interpolation
+	// hermite basis function for smooth interpolation
 	// Similar to Gain() above, but very cheap to call
 	// value should be between 0 & 1 inclusive
 	public static float SimpleSpline( float value )
@@ -100,18 +100,17 @@ public static partial class Util
 			string noExtension = Path.Combine( Path.GetDirectoryName( jpg ), Path.GetFileNameWithoutExtension( jpg ) );
 			return $"/{noExtension}.png";
 		}
-
 		return "";
 	}
 
 	/// <summary>
 	/// YRES(y) macro from Source SDK.
 	/// </summary>
-	public static float ResY( this float y ) => y * GameRules.Current.ScreenSize.y / 480;
+	public static float ResY( this float y ) => y * SDKGame.Current.ScreenSize.y / 480;
 	/// <summary>
 	/// XRES(y) macro from Source SDK.
 	/// </summary>
-	public static float ResX( this float x ) => x * GameRules.Current.ScreenSize.x / 640;
+	public static float ResX( this float x ) => x * SDKGame.Current.ScreenSize.x / 640;
 
 	public static int NearestToInt(this float num)
 	{

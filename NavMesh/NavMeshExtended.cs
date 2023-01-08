@@ -65,7 +65,7 @@ public class NavMeshExtended
 	private IEnumerable<Vector3> CollectPrecomputeEntitySeeds()
 	{
 		// Source 1 Base Spawn Points
-		var spawnPoints = Entity.All.OfType<PlayerSpawnPoint>();
+		var spawnPoints = Entity.All.OfType<SDKSpawnPoint>();
 		foreach ( var spawn in spawnPoints )
 			yield return spawn.Position;
 

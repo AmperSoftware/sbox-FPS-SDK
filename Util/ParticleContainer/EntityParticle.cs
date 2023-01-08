@@ -3,6 +3,11 @@ using System.Collections.Generic;
 
 namespace Amper.FPS;
 
+public interface IHasEffectEntity
+{
+	public ModelEntity GetEffectEntity();
+}
+
 public static class EntityParticleExtensions
 {
 	public static EntityParticle CreateParticle( this ModelEntity entity, string effect, bool follow = true, float lifeTime = -1 )
@@ -26,10 +31,6 @@ public static class EntityParticleExtensions
 	}
 }
 
-/// <summary>
-/// A wrapper for native s&amp;box Particles class that handles automatic first and third person 
-/// mode switches and automatic change to appropriate effect entity.
-/// </summary>
 public class EntityParticle : IValid
 {
 	public readonly ModelEntity Entity;
@@ -48,10 +49,7 @@ public class EntityParticle : IValid
 
 	public EntityParticle( ModelEntity entity, string effect, string attachment, Vector3 offset, bool follow = true, float lifeTime = -1 )
 	{
-		// If lifetime is not provided, we must provide a set amount of times 
-		// to auto dispose a particle.
-		if ( lifeTime < 0 ) 
-			lifeTime = cl_entity_particle_auto_dispose_time;
+		if ( lifeTime < 0 ) lifeTime = cl_entity_particle_auto_dispose_time;
 
 		Entity = entity;
 		EffectName = effect;
@@ -64,6 +62,7 @@ public class EntityParticle : IValid
 		// Attach the first control point.
 		SetControlPoint( 0, GetEffectEntity(), attachment, offset, follow );
 		Event.Register( this );
+
 	}
 
 	[Event.Tick.Client]
@@ -72,7 +71,7 @@ public class EntityParticle : IValid
 		// The entity we're attached is no longer valid.
 		if ( !Entity.IsValid() )
 		{
-			DebugMsg( "Entity is invalid, destroy ourselves." );
+			DebugMsg( $"Entity is invalid, destroy ourselves." );
 			Destroy( true );
 			return;
 		}
@@ -81,7 +80,7 @@ public class EntityParticle : IValid
 
 		if ( !effectEntity.IsValid() )
 		{
-			DebugMsg( "Effect entity is invalid, stop emitting until we have a valid effect entity again." );
+			DebugMsg( $"Effect entity is invalid, stop emitting until we have a valid effect entity again." );
 			StopEmitting();
 
 			// But also restart effect on valid effect entity.
@@ -92,7 +91,7 @@ public class EntityParticle : IValid
 		if ( StartEmittingOnValidEffectEntity )
 		{
 			StartEmittingOnValidEffectEntity = false;
-			DebugMsg( "Particle was disabled due to invalid effect entity, restarting now." );
+			DebugMsg( $"Particle was disabled due to invalid effect entity, restarting now." );
 			StartEmitting();
 		}
 
