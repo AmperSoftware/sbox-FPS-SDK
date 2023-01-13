@@ -232,6 +232,6 @@ public partial class SDKGame : GameManager
 	{
 		Event.Run( "buildinput" );
 		Game.LocalPawn?.BuildInput();
-		LastCamera?.BuildInput();
+		//LastCamera?.BuildInput();
 	}
 }

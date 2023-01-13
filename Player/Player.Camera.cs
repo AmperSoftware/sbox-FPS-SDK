@@ -1,9 +1,20 @@
 ﻿using Sandbox;
+using Sandbox.Diagnostics;
+using System;
 
 namespace Amper.FPS;
 
 partial class SDKPlayer
 {
+	[ConVar.Client] public static float cl_thirdperson_pitch { get; set; } = 0;
+	[ConVar.Client] public static float cl_thirdperson_yaw { get; set; } = 0;
+	[ConVar.Client] public static float cl_thirdperson_roll { get; set; } = 0;
+	[ConVar.Client] public static float cl_thirdperson_distance { get; set; } = 120;
+
+	/// <summary>
+	/// Is this player in third person?
+	/// </summary>
+	public bool IsThirdPerson => false;
 	public virtual void CalculateView()
 	{
 		if ( IsObserver )
@@ -15,25 +26,23 @@ partial class SDKPlayer
 			CalculatePlayerView();
 		}
 
-		CalculateFieldOfView( player );
-		CalculateScreenShake( player );
+		CalculateFieldOfView();
+		CalculateScreenShake();
 	}
 
 	public virtual void CalculatePlayerView()
 	{
-		Camera.Position = EyePosition;
-		Camera.Rotation = EyeRotation;
+		Camera.Position = this.GetEyePosition();
+		Camera.Rotation = this.GetEyeRotation();
 
 		SmoothViewOnStairs();
+		
+		var punch = ViewPunchAngle;
+		Camera.Rotation *= Rotation.From( punch.x, punch.y, punch.z );
+		SmoothViewOnStairs();
 
-		var punch = player.ViewPunchAngle;
-		Rotation *= Rotation.From( punch.x, punch.y, punch.z );
-		SmoothViewOnStairs( player );
-
-		if ( cl_thirdperson )
+		if ( IsThirdPerson )
 		{
-			Viewer = null;
-
 			var angles = (QAngle)Rotation;
 			angles.x += cl_thirdperson_pitch;
 			angles.y += cl_thirdperson_yaw;
@@ -46,69 +55,29 @@ partial class SDKPlayer
 				.WorldOnly()
 				.Run();
 
-			Position = tr.EndPosition;
+			Camera.Position = tr.EndPosition;
 		}
 	}
 
-
-	float m_flOldPlayerZ;
-	float m_flOldPlayerViewOffsetZ;
-	[ConVar.Client] public static bool cl_smoothstairs { get; set; } = true;
-
-	public virtual void SmoothViewOnStairs()
+	public virtual void CalculateObserverView( )
 	{
-		var pGroundEntity = GroundEntity;
-		float flCurrentPlayerZ = Position.z;
-		float flCurrentPlayerViewOffsetZ = GetLocalEyePosition().z;
-
-		// Smooth out stair step ups
-		// NOTE: Don't want to do this when the ground entity is moving the player
-		if ( pGroundEntity.IsValid() && 
-			flCurrentPlayerZ != m_flOldPlayerZ && 
-			cl_smoothstairs &&
-			m_flOldPlayerViewOffsetZ == flCurrentPlayerViewOffsetZ
-		) {
-			int dir = (flCurrentPlayerZ > m_flOldPlayerZ) ? 1 : -1;
-
-			float steptime = Time.Delta;
-			if ( steptime < 0 )
-			{
-				steptime = 0;
-			}
-
-			m_flOldPlayerZ += steptime * 150 * dir;
-
-			const float stepSize = 18.0f;
-
-			if ( dir > 0 )
-			{
-				if ( m_flOldPlayerZ > flCurrentPlayerZ )
-				{
-					m_flOldPlayerZ = flCurrentPlayerZ;
-				}
-				if ( flCurrentPlayerZ - m_flOldPlayerZ > stepSize )
-				{
-					m_flOldPlayerZ = flCurrentPlayerZ - stepSize;
-				}
-			}
-			else
-			{
-				if ( m_flOldPlayerZ < flCurrentPlayerZ )
-				{
-					m_flOldPlayerZ = flCurrentPlayerZ;
-				}
-				if ( flCurrentPlayerZ - m_flOldPlayerZ < -stepSize )
-				{
-					m_flOldPlayerZ = flCurrentPlayerZ + stepSize;
-				}
-			}
-
-			Position += Vector3.Up * (m_flOldPlayerZ - flCurrentPlayerZ);
-		}
-		else
+		switch ( ObserverMode )
 		{
-			m_flOldPlayerZ = flCurrentPlayerZ;
-			m_flOldPlayerViewOffsetZ = flCurrentPlayerViewOffsetZ;
+			case ObserverMode.Roaming:
+				CalculateRoamingCamView(  );
+				break;
+
+			case ObserverMode.InEye:
+				CalculateInEyeCamView(  );
+				break;
+
+			case ObserverMode.Chase:
+				CalculateChaseCamView(  );
+				break;
+
+			case ObserverMode.Deathcam:
+				CalculateDeathCamView(  );
+				break;
 		}
 	}
 }

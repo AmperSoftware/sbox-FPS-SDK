@@ -34,7 +34,7 @@ partial class SDKPlayer
 			return;
 
 		var fallDmgInfo = ExtendedDamageInfo.Create( fallDamage )
-			.WithFlag( DamageFlags.Fall )
+			.WithTag( DamageFlags.Fall )
 			.WithInflictor( this )
 			.WithAllPositions( Position );
 

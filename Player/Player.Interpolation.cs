@@ -27,7 +27,7 @@ partial class SDKPlayer
 		var lerpTime = Math.Clamp( InterpolationTime / tickTime, 0, 1 );
 
 		Position = LastPosition.LerpTo( NetworkPosition, lerpTime );
-		EyeLocalPosition = LastEyeLocalPosition.LerpTo( NetworkEyeLocalPosition, lerpTime );
+		//EyeLocalPosition = LastEyeLocalPosition.LerpTo( NetworkEyeLocalPosition, lerpTime );
 	}
 
 	public void StartInterpolating()

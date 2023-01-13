@@ -29,14 +29,14 @@ public class ClientJsonConverter : JsonConverter<IClient>
 	public override void Write( Utf8JsonWriter writer, IClient client, JsonSerializerOptions options ) => writer.WriteNumberValue( client.NetworkIdent );
 }
 
-public class ResourceJsonConverter : JsonConverter<Resource>
+public class ResourceJsonConverter : JsonConverter<GameResource>
 {
-	public override Resource Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
+	public override GameResource Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
 	{
-		return ResourceLibrary.Get<Resource>( reader.GetInt32() );
+		return ResourceLibrary.Get<GameResource>( reader.GetInt32() );
 	}
 
-	public override void Write( Utf8JsonWriter writer, Resource asset, JsonSerializerOptions options )
+	public override void Write( Utf8JsonWriter writer, GameResource asset, JsonSerializerOptions options )
 	{
 		writer.WriteNumberValue( asset.ResourceId );
 	}
@@ -44,6 +44,6 @@ public class ResourceJsonConverter : JsonConverter<Resource>
 	public override bool CanConvert( Type typeToConvert )
 	{
 		// Allow conversion of Entity and GameResource of Entity.
-		return typeToConvert.IsSubclassOf( typeof( Resource ) ) || base.CanConvert( typeToConvert );
+		return typeToConvert.IsSubclassOf( typeof( GameResource ) ) || base.CanConvert( typeToConvert );
 	}
 }

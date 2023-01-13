@@ -151,7 +151,7 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 
 	public float GetFOV()
 	{
-		var camFov = ((SDKCamera)CameraMode).FieldOfView;
+		var camFov = Camera.FieldOfView;
 		if ( camFov > 0 )
 			return camFov;
 

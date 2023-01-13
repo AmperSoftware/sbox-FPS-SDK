@@ -1,6 +1,8 @@
 ﻿using Sandbox;
 using System;
+using System.Buffers;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Amper.FPS;
 
@@ -11,12 +13,11 @@ public struct ExtendedDamageInfo
 	public Entity Weapon { get; set; } 
 	public Vector3 Force { get; set; } 
 	public float Damage { get; set; }
-	public IReadOnlyCollection<string> Tags => GetTags();
-	private HashSet<string> _tags { get; set; }
+	public IReadOnlyCollection<string> Tags => (IReadOnlyCollection<string>)_tags;
+	private IList<string> _tags { get; set; }
 	public PhysicsBody Body { get; set; } 
 	public Hitbox Hitbox { get; set; } 
 	public int BoneIndex { get; set; } 
-	public int KillType { get; set; }
 	/// <summary>
 	/// The position at which this damage has impacted with the victim. I.e. position that bullet has 
 	/// hit in the victim's hitboxes. The blood at the target will appear at this position.
@@ -56,23 +57,7 @@ public struct ExtendedDamageInfo
 		return this;
 	}
 
-	public ExtendedDamageInfo WithFlags( HashSet<string> flags ) => WithTags( flags );
-
-	[Obsolete( "Temporary fix for pain month (2022/12) issues, switch to tags instead!" )]
-	public ExtendedDamageInfo WithFlag( string flag )
-	{
-		_tags.Add( flag );
-		return this;
-	}
-
-	[Obsolete( "Temporary fix for pain month (2022/12) issues, switch to tags instead!" )]
-	public ExtendedDamageInfo WithoutFlag( string flag )
-	{
-		_tags.Add( flag );
-		return this;
-	}
-
-	public ExtendedDamageInfo SetTags(HashSet<string> tags)
+	public ExtendedDamageInfo SetTags(IList<string> tags)
 	{
 		_tags = tags;
 
@@ -80,12 +65,7 @@ public struct ExtendedDamageInfo
 	}
 	public ExtendedDamageInfo SetTags(IEnumerable<string> tags)
 	{
-		HashSet<string> newTags = new();
-		foreach(var tag in tags)
-		{
-			newTags.Add( tag );
-		}
-		_tags = newTags;
+		_tags = tags.ToList();
 
 		return this;
 	}
@@ -129,17 +109,6 @@ public struct ExtendedDamageInfo
 		return _tags.Contains( tag );
 	}
 
-	private IReadOnlyCollection<string> GetTags()
-	{
-		List<string> tags = new();
-		foreach(var tag in _tags)
-		{
-			tags.Add( tag );
-		}
-
-		return tags;
-	}
-
 	public ExtendedDamageInfo WithHitBody( PhysicsBody body )
 	{
 		Body = body;
@@ -157,7 +126,7 @@ public struct ExtendedDamageInfo
 		BoneIndex = bone;
 		return this;
 	}
-
+	
 	public ExtendedDamageInfo WithDamage( float damage )
 	{
 		Damage = damage;
@@ -206,13 +175,6 @@ public struct ExtendedDamageInfo
 		return this;
 	}
 
-	[Obsolete( "No longer needed as of pain month (2022/12), use tags instead!" )]
-	public ExtendedDamageInfo WithCustomKillType( int killType )
-	{
-		_tags.Add( $"legacy_custom_{killType}");
-		return this;
-	}
-
 	public ExtendedDamageInfo UsingTraceResult( TraceResult result )
 	{
 		HitPosition = result.EndPosition;
@@ -233,7 +195,7 @@ public struct ExtendedDamageInfo
 			Force = Force,
 			Damage = Damage,
 			Hitbox = Hitbox,
-			BoneIndex = BoneIndex,
+			BoneIndex = BoneIndex
 		};
 
 		return info;

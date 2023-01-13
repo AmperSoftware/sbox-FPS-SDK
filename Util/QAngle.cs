@@ -74,9 +74,19 @@ public struct QAngle
 	{
 		return new( value.Pitch(), value.Yaw(), value.Roll() );
 	}
+	
+	public static implicit operator QAngle(Angles value)
+	{
+		return new( value.pitch, value.yaw, value.roll );
+	}
 
 	public static implicit operator Rotation( QAngle value )
 	{
 		return Rotation.From( value.Pitch, value.Yaw, value.Roll );
+	}
+
+	public static implicit operator Angles(QAngle value)
+	{
+		return new( value.Pitch, value.Yaw, value.Roll );
 	}
 }

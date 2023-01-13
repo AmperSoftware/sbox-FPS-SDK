@@ -26,7 +26,7 @@ partial class SDKWeapon
 			.WithAttacker( Owner )
 			.WithInflictor( Owner )
 			.WithWeapon( this )
-			.WithFlag( DamageFlags.Bullet );
+			.WithTag( DamageFlags.Bullet );
 	}
 
 	/// <summary>

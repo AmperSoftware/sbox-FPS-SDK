@@ -43,7 +43,7 @@ partial class Projectile
 
 	public void FlyMoveSimulate()
 	{
-		Velocity += Map.Physics.Gravity * Gravity * Time.Delta;
+		Velocity += Game.PhysicsWorld.Gravity * Gravity * Time.Delta;
 		Position += Velocity * Time.Delta;
 
 		var angles = Rotation.Angles();

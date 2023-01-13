@@ -64,7 +64,7 @@ partial class SDKPlayer
 
 		if ( IsRoaming )
 		{
-			var start = target.GetEyeRotation();
+			var start = target.GetEyePosition();
 			var dir = target.GetEyeRotation().Forward.WithZ( 0 );
 			var end = start + dir * -64;
 

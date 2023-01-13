@@ -55,10 +55,12 @@ partial class SDKGame
 		var doors = All.OfType<DoorEntity>();
 		foreach ( var door in doors ) door.Reset();
 
-		Map.Reset( MapCleanUpFilter );
+		var keepEnts = Entity.All.Where( ent => !MapCleanUpFilter( ent ) ).ToArray();
+
+		Game.ResetMap( keepEnts );
 	}
 
-	public virtual bool MapCleanUpFilter( string classname, Entity entity )
+	public virtual bool MapCleanUpFilter( Entity entity )
 	{
 		if ( entity is SDKWeapon weapon && weapon.RemoveOnRoundRestart() )
 			return true;

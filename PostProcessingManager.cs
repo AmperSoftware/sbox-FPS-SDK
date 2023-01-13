@@ -39,7 +39,7 @@ public class PostProcessingManager
 		effect = TypeLibrary.Create<RenderHook>( type );
 		Effects.Add( type, effect );
 
-		Map.Camera.AddHook( effect );
+		Camera.Current.AddHook( effect );
 		SetVisible( effect, false );
 		return effect;
 	}
@@ -88,7 +88,7 @@ public class PostProcessingManager
 
 	public void SetForced( string name, bool enabled )
 	{
-		var type = TypeLibrary.GetDescription( name );
+		var type = TypeLibrary.GetType( name );
 		ForceEnabled[type.TargetType] = enabled;
 	}
 

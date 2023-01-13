@@ -110,12 +110,14 @@ partial class GameMovement
 
 		var vecDuckViewOffset = GetPlayerViewOffset( true );
 		var vecStandViewOffset = GetPlayerViewOffset( false );
+		/*
 		var temp = Player.EyeLocalPosition;
 
 		temp.z = ((vecDuckViewOffset.z - fMore) * duckFraction) +
 					(vecStandViewOffset.z * (1 - duckFraction));
 
 		Player.EyeLocalPosition = temp;
+		*/
 	}
 
 	public virtual void FinishDuck()

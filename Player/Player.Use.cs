@@ -15,7 +15,7 @@ partial class SDKPlayer
 	protected virtual Entity FindHovered( out float distance )
 	{
 		distance = 0;
-		var tr = Trace.Ray( EyePosition, EyePosition + EyeRotation.Forward * 5000 )
+		var tr = Trace.Ray( this.GetEyePosition(), this.GetEyePosition() + this.GetEyeRotation().Forward * 5000 )
 			.Ignore( this )
 			.WithAnyTags( CollisionTags.Solid )
 			.WithAnyTags( CollisionTags.Interactable )
@@ -107,7 +107,7 @@ partial class SDKPlayer
 
 	public Entity FindUseEntity()
 	{
-		var tr = Trace.Ray( EyePosition, EyePosition + EyeRotation.Forward * 1024 )
+		var tr = Trace.Ray( this.GetEyePosition(), this.GetEyePosition() + this.GetEyeRotation().Forward * 1024 )
 			.Ignore( this )
 			.WithAnyTags( CollisionTags.Solid )
 			.WithAnyTags( CollisionTags.Interactable )
@@ -132,7 +132,7 @@ partial class SDKPlayer
 			{
 				if ( sv_debug_player_use2 )
 				{
-					DebugOverlay.Line( EyePosition, tr.EndPosition, Color.Green, 30, true );
+					DebugOverlay.Line( this.GetEyePosition(), tr.EndPosition, Color.Green, 30, true );
 					DebugOverlay.Sphere( tr.EndPosition, 16, Color.Green, 30 );
 				}
 

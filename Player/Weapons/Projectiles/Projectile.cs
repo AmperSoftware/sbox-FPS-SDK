@@ -5,7 +5,7 @@ namespace Amper.FPS;
 public abstract partial class Projectile : ModelEntity, ITeam
 {
 	[Net] public int TeamNumber { get; set; }
-	[Net] public ExtendedDamageInfo DamageInfo { get; set; }
+	public ExtendedDamageInfo DamageInfo { get; set; }
 	[Net] public TimeSince TimeSinceCreated { get; set; }
 
 	/// <summary>

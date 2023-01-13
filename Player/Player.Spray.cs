@@ -14,7 +14,7 @@ partial class SDKPlayer
 			if ( player.TimeSinceSprayed < sv_spray_cooldown ) 
 				return;
 
-			var tr = Trace.Ray( player.EyePosition, player.EyePosition + player.EyeRotation.Forward * sv_spray_max_distance )
+			var tr = Trace.Ray( player.GetEyePosition(), player.GetEyePosition() + player.GetEyeRotation().Forward * sv_spray_max_distance )
 				.WorldOnly()
 				.Run();
 

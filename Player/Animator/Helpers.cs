@@ -10,7 +10,7 @@ partial class PlayerAnimator
 	/// </summary>
 	public virtual void SetLookAt( string name, Vector3 Position )
 	{
-		var localPos = (Position - Player.EyePosition) * Player.Rotation.Inverse;
+		var localPos = (Position - Player.GetEyePosition()) * Player.Rotation.Inverse;
 		SetAnimParameter( name, localPos );
 	}
 

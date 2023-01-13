@@ -24,9 +24,9 @@ public partial class PlayerAnimator : BaseNetworkable
 
 		// Update player's rotation, but also remember and preserve player's
 		// eye rotation so it doesn't spin when rotation is applied.
-		EyeRotation = Player.EyeRotation;
+		EyeRotation = Player.GetEyeRotation();
 		UpdateRotation();
-		Player.EyeRotation = EyeRotation;
+		//Player.GetEyeRotation() = EyeRotation;
 
 		UpdateLookAt();
 		UpdateDucking();
@@ -34,7 +34,7 @@ public partial class PlayerAnimator : BaseNetworkable
 
 	public virtual Rotation GetIdealRotation()
 	{
-		return Rotation.LookAt( Player.EyeRotation.Forward.WithZ( 0 ).Normal, Vector3.Up );
+		return Rotation.LookAt( Player.GetEyeRotation().Forward.WithZ( 0 ).Normal, Vector3.Up );
 	}
 
 	public virtual void UpdateRotation()
@@ -57,7 +57,7 @@ public partial class PlayerAnimator : BaseNetworkable
 	{
 		float pitch = -Player.GetEyeRotation().Pitch();
 		float yaw = Player.GetEyeRotation().Yaw();
-		Vector3 lookAtPos = Player.EyePosition + Player.EyeRotation.Forward * 200;
+		Vector3 lookAtPos = Player.GetEyePosition() + Player.GetEyeRotation().Forward * 200;
 
 		SetAnimParameter( "body_pitch", pitch );
 		SetAnimParameter( "body_yaw", yaw );

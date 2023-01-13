@@ -1,9 +1,13 @@
 ﻿using Sandbox;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Amper.FPS;
 
-partial class SDKCamera
+public partial class SDKPlayer
 {
 	protected float DefaultFieldOfView { get; private set; }
 	protected float LastFieldOfView { get; set; }
@@ -15,50 +19,50 @@ partial class SDKCamera
 	protected float FieldOfViewAnimateStart { get; private set; }
 	protected TimeSince TimeSinceFieldOfViewAnimateStart { get; private set; }
 
-	public void RetrieveFieldOfViewFromPlayer( SDKPlayer player )
+	public void RetrieveFieldOfViewFromPlayer( )
 	{
 		//
 		// Desired FOV Value
 		//
 
 		DesiredFieldOfView = DefaultFieldOfView;
-		if ( player.ForcedFieldOfView > 0 )
-			DesiredFieldOfView = player.ForcedFieldOfView;
+		if ( ForcedFieldOfView > 0 )
+			DesiredFieldOfView = ForcedFieldOfView;
 
 		//
 		// Desired FOV Change Time
 		//
 
 		FieldOfViewChangeTime = 0;
-		if ( player.ForcedFieldOfViewChangeTime > 0 )
+		if ( ForcedFieldOfViewChangeTime > 0 )
 		{
 			// If our fov change time is set to something, but we've already reached out desired FOV, then reset the speed to zero.
 			// We will be changing fov instantly until we're set speed again.
-			if ( LastFieldOfView == DesiredFieldOfView && player.ForcedFieldOfViewChangeTime > 0 )
-				player.ForcedFieldOfViewChangeTime = 0;
+			if ( LastFieldOfView == DesiredFieldOfView && ForcedFieldOfViewChangeTime > 0 )
+				ForcedFieldOfViewChangeTime = 0;
 
-			FieldOfViewChangeTime = player.ForcedFieldOfViewChangeTime;
+			FieldOfViewChangeTime = ForcedFieldOfViewChangeTime;
 		}
 	}
 
-	public virtual void CalculateFieldOfView( SDKPlayer player )
+	public virtual void CalculateFieldOfView(  )
 	{
 		if ( cl_debug_fov )
-			DebugFieldOfView( player );
+			DebugFieldOfView( );
 
 		//
 		// Some FOV changes require the screen animate from some other value.
 		// This property sets what FOV value we should start animating from.
 		//
 
-		if ( player.ForcedFieldOfViewStartWith.HasValue )
+		if ( ForcedFieldOfViewStartWith.HasValue )
 		{
-			LastFieldOfView = player.ForcedFieldOfViewStartWith.Value;
-			player.ForcedFieldOfViewStartWith = null;
+			LastFieldOfView = ForcedFieldOfViewStartWith.Value;
+			ForcedFieldOfViewStartWith = null;
 		}
 
 		// Retrieve FOV values from the player, if they choose to override FOV.
-		RetrieveFieldOfViewFromPlayer( player );
+		RetrieveFieldOfViewFromPlayer( );
 
 		if ( LastDesiredFieldOfView != DesiredFieldOfView )
 		{
@@ -73,21 +77,21 @@ partial class SDKCamera
 		if ( FieldOfViewChangeTime > 0 )
 		{
 			float lerp = Math.Clamp( TimeSinceFieldOfViewAnimateStart / FieldOfViewChangeTime, 0f, 1f );
-			FieldOfView = FieldOfViewAnimateStart.LerpTo( DesiredFieldOfView, lerp );
+			Camera.FieldOfView = FieldOfViewAnimateStart.LerpTo( DesiredFieldOfView, lerp );
 		}
 		else
 		{
 			// just set instantly, there shouldn't be any transition.
-			FieldOfView = DesiredFieldOfView;
+			Camera.FieldOfView = DesiredFieldOfView;
 		}
-		
+
 
 		LastDesiredFieldOfView = DesiredFieldOfView;
 	}
 
 	[ConVar.Client] public static float cl_viewmodel_fov { get; set; } = 75;
 
-	public void DebugFieldOfView( SDKPlayer player )
+	public void DebugFieldOfView()
 	{
 		DebugOverlay.ScreenText(
 			$"[FOV]\n" +
@@ -98,9 +102,9 @@ partial class SDKCamera
 			$"Animate Start         {FieldOfViewAnimateStart}\n" +
 			$"\n" +
 
-			$"Requester             {player.ForcedFieldOfViewRequester}\n" +
-			$"Force Start           {player.ForcedFieldOfViewStartWith}\n",
-			new Vector2( 60, 250 ) 
+			$"Requester             {ForcedFieldOfViewRequester}\n" +
+			$"Force Start           {ForcedFieldOfViewStartWith}\n",
+			new Vector2( 60, 250 )
 			);
 	}
 	[ConVar.Client] public static bool cl_debug_fov { get; set; }

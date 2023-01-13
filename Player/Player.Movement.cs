@@ -6,7 +6,7 @@ namespace Amper.FPS;
 partial class SDKPlayer
 {
 	[ClientInput] public Angles ViewAngles { get; set; }
-	[ClientInput] public Angles ActiveWeapon { get; set; }
+	//[ClientInput] public Angles ActiveWeapon { get; set; }
 
 	//
 	// View Angles
@@ -20,7 +20,6 @@ partial class SDKPlayer
 	/// </summary>
 	public void ForceViewAngles( Angles angles )
 	{
-		EyeRotation = angles.ToRotation();
 		if ( Game.IsServer ) ForceViewAnglesRPC( angles );
 		if ( Game.IsClient ) _forceViewAngles = angles;
 	}
@@ -196,7 +195,7 @@ public enum PlayerFlags
 
 /// <summary>
 /// These are movetypes that are used in the Source SDK.
-/// Garry recently removed them from s&box natively so we need
+/// Garry recently removed them from sbox natively so we need
 /// to keep the here manually.
 /// </summary>
 public enum MoveType

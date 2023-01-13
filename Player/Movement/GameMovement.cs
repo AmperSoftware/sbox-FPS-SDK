@@ -50,7 +50,7 @@ public partial class GameMovement
 	public virtual void FrameUpdate()
 	{
 		Game.AssertClient();
-		ViewAngles = Input.Rotation;
+		ViewAngles = Input.AnalogLook;
 	}
 
 	public virtual void SetupMoveData( SDKPlayer player )
@@ -59,16 +59,18 @@ public partial class GameMovement
 		Position = player.Position;
 		Velocity = player.Velocity;
 
-		ViewAngles = Input.Rotation;
-		ForwardMove = Input.Forward * MaxSpeed;
-		SideMove = -Input.Left * MaxSpeed;
-		UpMove = Input.Up * MaxSpeed;
+		ViewAngles = Input.AnalogLook;
+		var move = Input.AnalogMove;
+		ForwardMove = move.x * MaxSpeed;
+		SideMove = - move.z * MaxSpeed;
+		UpMove = move.y * MaxSpeed;
 	}
 
 	public virtual void ApplyMoveData( SDKPlayer player )
 	{
 		player.Position = Position;
-		player.EyeRotation = ViewAngles;
+		//player.EyeRotation = ViewAngles;
+		//player.AimRay;
 		player.Velocity = Velocity;
 
 		// TODO: Sort out basevelocity
@@ -118,7 +120,7 @@ public partial class GameMovement
 	public virtual void UpdateViewOffset()
 	{
 		// reset x,y
-		Player.EyeLocalPosition = GetPlayerViewOffset( false );
+		//Player.EyeLocalPosition = GetPlayerViewOffset( false );
 
 		if ( Player.DuckTime == 0 )
 			return;

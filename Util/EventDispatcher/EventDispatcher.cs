@@ -280,7 +280,7 @@ public partial class EventDispatcher
 		Type typeHint;
 		if ( !typeHints.TryGetValue( typename, out typeHint ) ) 
 		{
-			var type = TypeLibrary.GetDescription<DispatchableEventBase>( typename );
+			var type = TypeLibrary.GetType<DispatchableEventBase>( typename );
 			typeHint = type.TargetType;
 		}
 

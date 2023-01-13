@@ -9,6 +9,7 @@ partial class SDKPlayer
 {
 	public IEnumerable<SDKWeapon> Weapons => Children.OfType<SDKWeapon>();
 	[Net, Predicted] public SDKWeapon ActiveWeapon { get; set; }
+	[ClientInput] public SDKWeapon RequestedActiveWeapon { get; set; }
 	[Predicted] SDKWeapon LastActiveWeapon { get; set; }
 
 	/// <summary>
@@ -18,7 +19,7 @@ partial class SDKPlayer
 
 	public virtual void SimulateActiveWeapon( IClient cl )
 	{
-		if ( Input.ActiveChild is SDKWeapon newWeapon )
+		if ( RequestedActiveWeapon is SDKWeapon newWeapon )
 			SwitchToWeapon( newWeapon );
 
 		if ( LastActiveWeapon != ActiveWeapon )
@@ -151,10 +152,10 @@ partial class SDKPlayer
 		}
 	}
 
-	public virtual Vector3 GetAttackPosition() => EyePosition;
+	public virtual Vector3 GetAttackPosition() => this.GetEyePosition();
 	public virtual Rotation GetAttackRotation()
 	{
-		var eyeAngles = EyeRotation;
+		var eyeAngles = this.GetEyeRotation();
 		var punch = ViewPunchAngle;
 		eyeAngles *= Rotation.From( punch.x, punch.y, punch.z );
 		return eyeAngles;
@@ -209,7 +210,7 @@ partial class SDKPlayer
 	public virtual bool ThrowWeapon( SDKWeapon weapon, float force = 400 )
 	{
 		var origin = WorldSpaceBounds.Center;
-		var vecForce = EyeRotation.Forward * 100 + Vector3.Up * 100;
+		var vecForce = this.GetEyeRotation().Forward * 100 + Vector3.Up * 100;
 		vecForce = vecForce.Normal;
 		vecForce *= 400;
 
