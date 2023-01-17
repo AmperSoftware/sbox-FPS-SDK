@@ -8,13 +8,15 @@ namespace Amper.FPS;
 
 public struct ExtendedDamageInfo
 {
+	
+
 	public Entity Attacker { get; set; }
 	public Entity Inflictor { get; set; } 
 	public Entity Weapon { get; set; } 
 	public Vector3 Force { get; set; } 
 	public float Damage { get; set; }
 	public IReadOnlyCollection<string> Tags => (IReadOnlyCollection<string>)_tags;
-	private IList<string> _tags { get; set; }
+	private IList<string> _tags { get; set; } 
 	public PhysicsBody Body { get; set; } 
 	public Hitbox Hitbox { get; set; } 
 	public int BoneIndex { get; set; } 
@@ -36,6 +38,8 @@ public struct ExtendedDamageInfo
 	{
 		ExtendedDamageInfo result = default;
 		result.Damage = damage;
+		result._tags = new List<string>();
+
 		return result;
 	}
 
