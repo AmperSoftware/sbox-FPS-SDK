@@ -9,7 +9,7 @@ partial class SDKPlayer
 {
 	public IEnumerable<SDKWeapon> Weapons => Children.OfType<SDKWeapon>();
 	[Net, Predicted] public SDKWeapon ActiveWeapon { get; set; }
-	[ClientInput] public SDKWeapon RequestedActiveWeapon { get; set; }
+	[ClientInput] public Entity RequestedActiveWeapon { get; set; }
 	[Predicted] SDKWeapon LastActiveWeapon { get; set; }
 
 	/// <summary>
@@ -19,8 +19,10 @@ partial class SDKPlayer
 
 	public virtual void SimulateActiveWeapon( IClient cl )
 	{
-		if ( RequestedActiveWeapon is SDKWeapon newWeapon )
-			SwitchToWeapon( newWeapon );
+		if ( RequestedActiveWeapon != ActiveWeapon && RequestedActiveWeapon is SDKWeapon weapon )
+		{
+			SwitchToWeapon( weapon );
+		}
 
 		if ( LastActiveWeapon != ActiveWeapon )
 		{
@@ -58,7 +60,7 @@ partial class SDKPlayer
 	{
 		if ( !weapon.IsValid() )
 			return false;
-
+		
 		// Cant switch to something we don't have equipped.
 		if ( !IsEquipped( weapon ) )
 			return false;
