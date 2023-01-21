@@ -10,8 +10,8 @@ partial class SDKPlayer
 	Vector3 LastPosition { get; set; }
 	Vector3 NetworkPosition { get; set; }
 
-	Vector3 LastEyeLocalPosition { get; set; }
-	Vector3 NetworkEyeLocalPosition { get; set; }
+	//Vector3 LastEyeLocalPosition { get; set; }
+	//Vector3 NetworkEyeLocalPosition { get; set; }
 
 	float InterpolationTime { get; set; }
 
@@ -42,7 +42,7 @@ partial class SDKPlayer
 		InterpolationTime = 0;
 
 		LastPosition = Position;
-		LastEyeLocalPosition = this.GetLocalEyePosition();
+		//LastEyeLocalPosition = this.GetLocalEyePosition();
 	}
 
 	public void StopInterpolating()
@@ -54,6 +54,6 @@ partial class SDKPlayer
 			return;
 
 		NetworkPosition = Position;
-		NetworkEyeLocalPosition = this.GetLocalEyePosition();
+		//NetworkEyeLocalPosition = this.GetLocalEyePosition();
 	}
 }

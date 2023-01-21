@@ -14,9 +14,12 @@ public partial class SDKViewModel : BaseViewModel
 		EnableViewmodelRendering = true;
 	}
 
-	[Event.Client.PostCamera]
-	public void PostCameraSetup( )
+	public override void PlaceViewmodel()
 	{
+		base.PlaceViewmodel();
+
+		// TODO: Viewmodel FOV
+
 		var visible = ShouldDraw();
 		EnableDrawing = visible;
 
