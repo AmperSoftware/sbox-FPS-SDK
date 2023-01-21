@@ -17,7 +17,8 @@ partial class GameMovement
 	protected void CheckWaterJump()
 	{
 		// Determine movement angles
-		ViewAngles.AngleVectors( out var forward, out _, out _ );
+		QAngle angles = Player.ViewAngles;
+		angles.AngleVectors( out var forward, out _, out _ );
 
 		// Already water jumping.
 		if ( Player.WaterJumpTime != 0 ) 

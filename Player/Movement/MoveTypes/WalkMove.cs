@@ -85,23 +85,16 @@ partial class GameMovement
 
 	public virtual void WalkMove()
 	{
-		ViewAngles.AngleVectors( out var forward, out var right, out var up );
+		QAngle angles = Player.ViewAngles;
+		angles.AngleVectors( out var forward, out var right, out var up );
 		var oldGround = Player.GroundEntity;
 
 		var fmove = ForwardMove;
 		var smove = SideMove;
 
-		if ( forward[2] != 0 )
-		{
-			forward[2] = 0;
-			forward = forward.Normal;
-		}
-
-		if ( right[2] != 0 )
-		{
-			right[2] = 0;
-			right = right.Normal;
-		}
+		// Get the wish direction.
+		forward = forward.WithZ( 0 ).Normal;
+		right = right.WithZ( 0 ).Normal;
 
 		Vector3 wishvel = 0;
 		for ( int i = 0; i < 2; i++ )
@@ -112,12 +105,14 @@ partial class GameMovement
 		var wishspeed = wishvel.Length;
 		var wishdir = wishvel.Normal;
 
+		DebugOverlay.ScreenText( wishvel.ToString(), -4 );
+		DebugOverlay.ScreenText( wishdir.ToString(), -3 );
+
 		//
 		// Clamp to server defined max speed
 		//
 		if ( wishspeed != 0 && wishspeed > MaxSpeed )
 		{
-			wishvel *= MaxSpeed / wishspeed;
 			wishspeed = MaxSpeed;
 		}
 
@@ -232,7 +227,8 @@ partial class GameMovement
 
 	public virtual void AirMove()
 	{
-		ViewAngles.AngleVectors( out var forward, out var right, out var up );
+		QAngle angles = Player.ViewAngles;
+		angles.AngleVectors( out var forward, out var right, out var up );
 
 		var fmove = ForwardMove;
 		var smove = SideMove;

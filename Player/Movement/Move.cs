@@ -15,6 +15,7 @@ partial class GameMovement
 		}
 
 		MoveHelper mover = new MoveHelper( Position, Velocity );
+		
 		mover.Trace = SetupBBoxTrace( 0, 0 );
 		mover.MaxStandableAngle = sv_maxstandableangle;
 

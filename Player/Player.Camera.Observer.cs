@@ -20,6 +20,8 @@ public partial class SDKPlayer
 
 	public void CalculateChaseCamView( )
 	{
+		Camera.FirstPersonViewer = null;
+
 		var target = ObserverTarget;
 
 		if ( target == null )
@@ -43,6 +45,8 @@ public partial class SDKPlayer
 
 	public void CalculateDeathCamView()
 	{
+		Camera.FirstPersonViewer = null;
+
 		var killer = LastAttacker;
 
 		// if we dont have a killer use chase cam
@@ -96,6 +100,8 @@ public partial class SDKPlayer
 
 	public void CalculateFreezeCamView( )
 	{
+		Camera.FirstPersonViewer = null;
+
 		var killer = LastAttacker;
 
 		if ( killer == null )
@@ -196,5 +202,6 @@ public partial class SDKPlayer
 
 	public void CalculateRoamingCamView( )
 	{
+		Camera.FirstPersonViewer = null;
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using Sandbox;
 using Sandbox.Diagnostics;
+using Sandbox.Internal.Globals;
 using System;
 
 namespace Amper.FPS;
@@ -34,6 +35,21 @@ public static class Source1Extensions
 	public static bool IsValid( this GameResource resource ) => resource != null;
 	public static void NetInfo( this Logger logger, FormattableString message ) => logger.Info( $"[{(Game.IsServer ? "SV" : "CL")}] {message}" );
 	public static void NetInfo( this Logger logger, object message ) => logger.Info( $"[{(Game.IsServer ? "SV" : "CL")}] {message}" );
+	public static void NetScreenText(this DebugOverlay overlay, string message, int line = 0, float time = 0f, int clientLineOffset = 1)
+	{
+		if ( clientLineOffset == 0 )
+			clientLineOffset = 1;
+				
+		if ( Game.IsServer )
+		{
+			overlay.ScreenText( message, Vector2.One * 100, line, Color.Yellow, time );
+		}
+		else
+		{
+			overlay.ScreenText( message, Vector2.One * 100, line + clientLineOffset, Color.Cyan, time );
+		}
+	}
+	public static void NetScreenText( this DebugOverlay overlay, object message, int line = 0, float time = 0f, int clientLineOffset = 1 ) => overlay.NetScreenText( message?.ToString(), line, time, clientLineOffset );
 }
 
 public static class CollisionTags

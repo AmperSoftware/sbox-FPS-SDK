@@ -33,7 +33,8 @@ partial class GameMovement
 
 	protected void WaterMove()
 	{
-		ViewAngles.AngleVectors( out var forward, out var right, out var up );
+		QAngle angles = Player.ViewAngles;
+		angles.AngleVectors( out var forward, out var right, out var up );
 
 		var wishvel = forward * ForwardMove + right * SideMove;
 

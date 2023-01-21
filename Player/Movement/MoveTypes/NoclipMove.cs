@@ -19,7 +19,7 @@ partial class GameMovement
 			if ( target.IsValid() )
 			{
 				Position = target.Position;
-				ViewAngles = target.Rotation;
+				Player.ViewAngles = target.Rotation.Angles();
 				Velocity = target.Velocity;
 			}
 
@@ -38,8 +38,8 @@ partial class GameMovement
 		}
 
 		// do a full clipped free roam move:
-
-		ViewAngles.AngleVectors( out var forward, out var right, out var up );
+		QAngle angles = Player.ViewAngles;
+		angles.AngleVectors( out var forward, out var right, out var up );
 
 		// Copy movement amounts
 		float factor = sv_spectator_speed;
@@ -104,7 +104,8 @@ partial class GameMovement
 	public virtual void FullNoClipMove( float factor, float maxacceleration )
 	{
 		float maxspeed = sv_maxspeed * factor;
-		ViewAngles.AngleVectors( out var forward, out var right, out var up );
+		QAngle angles = Player.ViewAngles;
+		angles.AngleVectors( out var forward, out var right, out var up );
 
 		if ( Input.Down( InputButton.Run ) )
 			factor /= 2.0f;

@@ -16,7 +16,8 @@ partial class GameMovement
 
 	public virtual void AirDash()
 	{
-		ViewAngles.AngleVectors( out var forward, out var right, out var up );
+		QAngle angles = Player.ViewAngles;
+		angles.AngleVectors( out var forward, out var right, out var up );
 
 		// Get the wish direction.
 		forward = forward.WithZ( 0 ).Normal;

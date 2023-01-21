@@ -8,7 +8,7 @@ partial class GameMovement
 	{
 		if ( sv_debug_movement && Player.Client.IsListenServerHost && Game.IsServer )
 		{
-			DebugOverlay.ScreenText( CreateDebugString(), new Vector2( 60, 250 ) );
+			DebugOverlay.ScreenText( CreateDebugString(), new Vector2( 60, 150 ) );
 		}
 	}
 

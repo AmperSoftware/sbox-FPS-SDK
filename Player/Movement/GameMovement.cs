@@ -10,7 +10,6 @@ public partial class GameMovement
 	public float MaxSpeed;
 	public Vector3 Position;
 	public Vector3 Velocity;
-	public QAngle ViewAngles;
 
 	public float ForwardMove;
 	public float SideMove;
@@ -43,14 +42,7 @@ public partial class GameMovement
 		SetupMoveData( player );
 
 		// Do frame updates
-		FrameUpdate();
 		ApplyMoveData( player );
-	}
-
-	public virtual void FrameUpdate()
-	{
-		Game.AssertClient();
-		ViewAngles = Input.AnalogLook;
 	}
 
 	public virtual void SetupMoveData( SDKPlayer player )
@@ -59,11 +51,11 @@ public partial class GameMovement
 		Position = player.Position;
 		Velocity = player.Velocity;
 
-		ViewAngles = Input.AnalogLook;
 		var move = Input.AnalogMove;
+		
 		ForwardMove = move.x * MaxSpeed;
-		SideMove = - move.z * MaxSpeed;
-		UpMove = move.y * MaxSpeed;
+		SideMove = -move.y * MaxSpeed;
+		UpMove = move.z * MaxSpeed;
 	}
 
 	public virtual void ApplyMoveData( SDKPlayer player )
@@ -408,6 +400,7 @@ public partial class GameMovement
 
 	public virtual void CheckParameters()
 	{
+		QAngle angles = Player.ViewAngles;
 		if ( Player.MoveType != MoveType.Isometric &&
 			Player.MoveType != MoveType.NoClip &&
 			Player.MoveType != MoveType.Observer )
@@ -441,10 +434,10 @@ public partial class GameMovement
 			SetGroundEntity( null );
 
 		DecayViewPunchAngle();
-
+		
 		if ( !Player.IsAlive )
 		{
-			var v_angle = ViewAngles;
+			var v_angle = angles;
 			v_angle = v_angle + Player.ViewPunchAngle;
 
 			// Now adjust roll angle
@@ -455,20 +448,21 @@ public partial class GameMovement
 			}
 			else
 			{
-				ViewAngles.Roll = 0; // v_angle[ ROLL ];
+				Player.ViewAngles = Player.ViewAngles.WithRoll(0); // v_angle[ ROLL ];
 			}
 
-			ViewAngles.Pitch = v_angle.Pitch;
-			ViewAngles.Yaw = v_angle.Yaw;
+			Player.ViewAngles = Player.ViewAngles.WithPitch( v_angle.Pitch);
+			Player.ViewAngles = Player.ViewAngles.WithYaw(v_angle.Yaw);
 		}
 		else
 		{
 			// mv->m_vecAngles = mv->m_vecOldAngles;
 		}
 
-		if ( ViewAngles.Yaw > 180 )
+		
+		if ( angles.Yaw > 180 )
 		{
-			ViewAngles.Yaw -= 360;
+			Player.ViewAngles = Player.ViewAngles.WithYaw(angles.Yaw - 360);
 		}
 	}
 }

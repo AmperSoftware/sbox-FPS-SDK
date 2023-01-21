@@ -9,7 +9,7 @@ namespace Amper.FPS;
 
 public partial class SDKPlayer
 {
-	protected float DefaultFieldOfView { get; private set; }
+	protected float DefaultFieldOfView { get; private set; } = 90f;
 	protected float LastFieldOfView { get; set; }
 
 	protected float DesiredFieldOfView { get; private set; }

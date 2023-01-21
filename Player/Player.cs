@@ -30,15 +30,20 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 
 	public virtual float GetMaxHealth() => 100;
 
+	//public QAngle ViewAngles;
+	public override Ray AimRay => new( Position + Vector3.Up * 64, Rotation.Forward );
+
 	public override void FrameSimulate( IClient cl )
 	{
 		base.FrameSimulate( cl );
+		ViewAngles -= Input.AnalogLook;
 
 		Animator?.Simulate( this );
 		SDKGame.Current.Movement?.FrameSimulate( this );
 		ActiveWeapon?.FrameSimulate( cl );
 
 		InterpolateFrame();
+		CalculateView();
 	}
 
 	/// <summary>
@@ -63,6 +68,8 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 
 		SimulateHover();
 		SimulateUse();
+
+		DebugOverlay.Line( AimRay.Position, AimRay.Position + AimRay.Forward * 100f, Color.Red );
 	}
 
 	/// <summary>
