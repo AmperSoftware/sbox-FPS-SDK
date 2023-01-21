@@ -36,7 +36,7 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 	public override void FrameSimulate( IClient cl )
 	{
 		base.FrameSimulate( cl );
-		ViewAngles -= Input.AnalogLook;
+		ViewAngles += Input.AnalogLook;
 
 		Animator?.Simulate( this );
 		SDKGame.Current.Movement?.FrameSimulate( this );
