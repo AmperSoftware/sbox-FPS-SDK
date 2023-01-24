@@ -8,8 +8,6 @@ namespace Amper.FPS;
 
 public struct ExtendedDamageInfo
 {
-	
-
 	public Entity Attacker { get; set; }
 	public Entity Inflictor { get; set; } 
 	public Entity Weapon { get; set; } 
