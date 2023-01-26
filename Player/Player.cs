@@ -28,10 +28,12 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 	[Net] public new Entity LastAttacker { get; set; }
 	[Net] public new Entity LastAttackerWeapon { get; set; }
 
+	public virtual Vector3 EyePosition => Position + GetPlayerViewOffset( IsDucked );
+	[Net] public Rotation EyeRotation { get; set; }
 	public virtual float GetMaxHealth() => 100;
 
 	//public QAngle ViewAngles;
-	public override Ray AimRay => new( Position + GetPlayerViewOffset(IsDucked), Rotation.Forward );
+	public override Ray AimRay => new( EyePosition , EyeRotation.Forward );
 
 	public override void FrameSimulate( IClient cl )
 	{
@@ -42,7 +44,8 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 		ActiveWeapon?.FrameSimulate( cl );
 		
 		var look = Input.AnalogLook;
-		ViewAngles -= look.WithPitch( -look.pitch );
+		ViewAngles += look.WithYaw(-look.yaw);
+		ViewAngles = ViewAngles.WithPitch( ViewAngles.pitch.Clamp( -80f, 80f ) );
 
 		InterpolateFrame();
 		CalculateView();
@@ -85,7 +88,8 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 
 	public virtual void SimulateMovement()
 	{
-		Rotation = ViewAngles.ToRotation();
+		EyeRotation = ViewAngles.ToRotation();
+		Rotation = Transform.RotationToLocal( ViewAngles.WithPitch( 0 ).WithRoll( 0 ).ToRotation() );
 
 		StartInterpolating();
 		SDKGame.Current.Movement?.Simulate( this );
