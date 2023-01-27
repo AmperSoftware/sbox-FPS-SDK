@@ -202,6 +202,11 @@ public struct ExtendedDamageInfo
 
 		return info;
 	}
+
+	public override string ToString()
+	{
+		return $"ExtendedDamageInfo[Dmg: {Damage}, Pos: {HitPosition}, Weapon: {Weapon}]";
+	}
 }
 
 public interface IAcceptsExtendedDamageInfo
