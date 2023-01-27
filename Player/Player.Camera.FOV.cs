@@ -9,7 +9,6 @@ namespace Amper.FPS;
 
 public partial class SDKPlayer
 {
-	protected float DefaultFieldOfView { get; private set; } = 90f;
 	protected float LastFieldOfView { get; set; }
 
 	protected float DesiredFieldOfView { get; private set; }
@@ -25,7 +24,7 @@ public partial class SDKPlayer
 		// Desired FOV Value
 		//
 
-		DesiredFieldOfView = Screen.CreateVerticalFieldOfView( Game.Preferences.FieldOfView );;
+		DesiredFieldOfView = Screen.CreateVerticalFieldOfView(Game.Preferences.FieldOfView);
 		if ( ForcedFieldOfView > 0 )
 			DesiredFieldOfView = ForcedFieldOfView;
 
@@ -95,7 +94,6 @@ public partial class SDKPlayer
 	{
 		DebugOverlay.ScreenText(
 			$"[FOV]\n" +
-			$"Default               {DefaultFieldOfView}\n" +
 			$"Last Value            {LastFieldOfView}\n" +
 			$"Desired               {DesiredFieldOfView}\n" +
 			$"Change Time           {FieldOfViewChangeTime}\n" +
