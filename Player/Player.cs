@@ -42,10 +42,6 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 		Animator?.Simulate( this );
 		SDKGame.Current.Movement?.FrameSimulate( this );
 		ActiveWeapon?.FrameSimulate( cl );
-		
-		var look = Input.AnalogLook;
-		ViewAngles += look.WithYaw(-look.yaw);
-		ViewAngles = ViewAngles.WithPitch( ViewAngles.pitch.Clamp( -80f, 80f ) );
 
 		InterpolateFrame();
 		CalculateView();
@@ -304,6 +300,9 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 	{
 		if ( Input.StopProcessing )
 			return;
+		
+		ViewAngles += Input.AnalogLook;
+		ViewAngles = ViewAngles.WithPitch( ViewAngles.pitch.Clamp( -80f, 80f ) );
 
 		if ( _forceViewAngles.HasValue )
 		{

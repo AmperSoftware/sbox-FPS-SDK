@@ -167,7 +167,7 @@ public partial class SDKPlayer
 		//
 
 		float fov = Camera.FieldOfView;
-		if ( fov <= 0 ) fov = DefaultFieldOfView;
+		if ( fov <= 0 ) fov = DesiredFieldOfView;
 
 		if ( WillFreezeGameScene && travelLerp >= 1 )
 		{
