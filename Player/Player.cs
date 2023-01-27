@@ -43,8 +43,6 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 		SDKGame.Current.Movement?.FrameSimulate( this );
 		ActiveWeapon?.FrameSimulate( cl );
 		
-		var look = Input.AnalogLook;
-		ViewAngles += look.WithYaw(-look.yaw);
 		ViewAngles = ViewAngles.WithPitch( ViewAngles.pitch.Clamp( -80f, 80f ) );
 
 		InterpolateFrame();
@@ -302,6 +300,8 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 	/// </summary>
 	public override void BuildInput()
 	{
+		ViewAngles += Input.AnalogLook;
+		
 		if ( Input.StopProcessing )
 			return;
 

@@ -25,7 +25,7 @@ public partial class SDKPlayer
 		// Desired FOV Value
 		//
 
-		DesiredFieldOfView = DefaultFieldOfView;
+		DesiredFieldOfView = Screen.CreateVerticalFieldOfView( Game.Preferences.FieldOfView );;
 		if ( ForcedFieldOfView > 0 )
 			DesiredFieldOfView = ForcedFieldOfView;
 
