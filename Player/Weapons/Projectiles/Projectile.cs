@@ -159,6 +159,7 @@ public abstract partial class Projectile : ModelEntity, ITeam
 	{
 		Game.AssertServer();
 
+		DamageInfo = DamageInfo.WithHitPosition( trace.EndPosition );
 		DoExplosionEffect( Position, trace.Normal );
 
 		if ( Owner.IsValid() ) 
@@ -202,6 +203,9 @@ public abstract partial class Projectile : ModelEntity, ITeam
 
 		ent.Owner = owner;
 		ent.Launcher = launcher;
+
+		info = info.WithAttacker( owner );
+		info = info.WithWeapon( launcher );
 		ent.DamageInfo = info;
 
 		// Set the projectile's team to owner's team if it has a team.
