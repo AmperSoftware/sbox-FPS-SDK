@@ -5,6 +5,8 @@ namespace Amper.FPS;
 
 public partial class SDKViewModel : BaseViewModel
 {
+	[ConVar.Client] public static float cl_viewmodel_fov { get; set; } = 75;
+
 	public SDKWeapon Weapon { get; set; }
 	public SDKPlayer Player => Weapon?.Player;
 
@@ -18,7 +20,7 @@ public partial class SDKViewModel : BaseViewModel
 	{
 		base.PlaceViewmodel();
 
-		// TODO: Viewmodel FOV
+		Camera.Main.SetViewModelCamera(cl_viewmodel_fov);
 
 		var visible = ShouldDraw();
 		EnableDrawing = visible;
