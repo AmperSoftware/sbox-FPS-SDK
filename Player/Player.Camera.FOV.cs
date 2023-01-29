@@ -88,8 +88,6 @@ public partial class SDKPlayer
 		LastDesiredFieldOfView = DesiredFieldOfView;
 	}
 
-	[ConVar.Client] public static float cl_viewmodel_fov { get; set; } = 75;
-
 	public void DebugFieldOfView()
 	{
 		DebugOverlay.ScreenText(
