@@ -93,15 +93,6 @@ public abstract partial class Projectile : ModelEntity, ITeam
 	{
 		EnableDrawing = true;
 
-		// Remember all this.
-		OriginalPosition = Position;
-		OriginalVelocity = Velocity;
-		OriginalLauncher = Launcher;
-		OriginalOwner = Owner;
-
-		// Copy base velocity too, some projectile use it
-		BaseVelocity = Velocity;
-
 		UpdateFaceRotation();
 		CreateTrails();
 	}
@@ -212,6 +203,7 @@ public abstract partial class Projectile : ModelEntity, ITeam
 		if ( owner is ITeam ownerTeam )
 			ent.TeamNumber = ownerTeam.TeamNumber;
 
+		ent.OnInitialized();
 		return ent;
 	}
 }

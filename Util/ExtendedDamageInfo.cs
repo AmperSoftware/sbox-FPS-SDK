@@ -108,7 +108,7 @@ public struct ExtendedDamageInfo
 
 	public bool HasTag(string tag)
 	{
-		return _tags.Contains( tag );
+		return _tags != null && _tags.Contains( tag );
 	}
 
 	public ExtendedDamageInfo WithHitBody( PhysicsBody body )
