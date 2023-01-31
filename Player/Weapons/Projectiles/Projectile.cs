@@ -205,6 +205,7 @@ public abstract partial class Projectile : ModelEntity, ITeam
 
 		info = info.WithAttacker( owner );
 		info = info.WithWeapon( launcher );
+		info = info.WithInflictor( ent );
 		ent.DamageInfo = info;
 
 		// Set the projectile's team to owner's team if it has a team.
