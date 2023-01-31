@@ -112,7 +112,7 @@ public partial class GameMovement
 	public virtual void UpdateViewOffset()
 	{
 		// reset x,y
-		//Player.EyeLocalPosition = GetPlayerViewOffset( false );
+		Player.EyeLocalPosition = GetPlayerViewOffset( false );
 
 		if ( Player.DuckTime == 0 )
 			return;

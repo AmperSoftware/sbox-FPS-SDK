@@ -28,7 +28,12 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 	[Net] public new Entity LastAttacker { get; set; }
 	[Net] public new Entity LastAttackerWeapon { get; set; }
 
-	public virtual Vector3 EyePosition => Position + GetPlayerViewOffset( IsDucked );
+	public virtual Vector3 EyePosition
+	{
+		get => Transform.PointToWorld( EyeLocalPosition );
+		set => EyeLocalPosition = Transform.PointToLocal( value );
+	}
+	public Vector3 EyeLocalPosition { get; set; }
 	[Net] public Rotation EyeRotation { get; set; }
 	public virtual float GetMaxHealth() => 100;
 
