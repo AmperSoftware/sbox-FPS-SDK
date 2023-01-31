@@ -93,6 +93,14 @@ public abstract partial class Projectile : ModelEntity, ITeam
 	{
 		EnableDrawing = true;
 
+		OriginalPosition = Position;
+		OriginalVelocity = Velocity;
+		OriginalLauncher = Launcher;
+		OriginalOwner = Owner;
+		
+		// Copy base velocity too, some projectile use it
+		BaseVelocity = Velocity;
+		
 		UpdateFaceRotation();
 		CreateTrails();
 	}
