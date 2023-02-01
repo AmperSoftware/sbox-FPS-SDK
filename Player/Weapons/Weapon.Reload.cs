@@ -139,7 +139,7 @@ partial class SDKWeapon
 			return false;
 
 		// We're not done shooting yet.
-		if ( NextAttackTime >= Time.Now )
+		if ( NextPrimaryAttackTime >= Time.Now )
 			return false;
 
 		return true;
