@@ -33,13 +33,18 @@ public class PostProcessingManager
 
 	public RenderHook GetOrCreate( Type type )
 	{
-		if ( Effects.TryGetValue( type, out var effect ) )
+		RenderHook effect;
+
+        if ( Effects.TryGetValue( type, out effect ) && effect != null )
 			return effect;
 
-		effect = TypeLibrary.Create<RenderHook>( type );
-		Effects.Add( type, effect );
-
-		Camera.Current.AddHook( effect );
+		effect = Camera.Main.FindHook(type);
+		if(effect == null)
+		{
+            effect = TypeLibrary.Create<RenderHook>(type);
+            Camera.Main.AddHook(effect);
+        }
+		Effects[type] = effect;
 		SetVisible( effect, false );
 		return effect;
 	}
@@ -71,7 +76,7 @@ public class PostProcessingManager
 			return;
 
 		Log.Info( $"SetVisible {effect.GetType().Name} {visible}" );
-		effect.Enabled = true;
+		effect.Enabled = visible;
 
 		var type = effect.GetType();
 		EnabledCached[type] = visible;
