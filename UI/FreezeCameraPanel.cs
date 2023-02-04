@@ -3,8 +3,7 @@ using Sandbox.UI;
 
 namespace Amper.FPS;
 
-[UseTemplate]
-public class FreezeCameraPanel : Panel
+public partial class FreezeCameraPanel : Panel
 {
 	public static FreezeCameraPanel Instance { get; set; }
 	public float FreezeTime { get; set; }

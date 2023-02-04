@@ -4,8 +4,7 @@ using System;
 
 namespace Amper.FPS;
 
-[UseTemplate]
-public class ColorFormattedString : Panel
+public partial class ColorFormattedString : Panel
 {
 	public ColorFormattedString Clear()
 	{
