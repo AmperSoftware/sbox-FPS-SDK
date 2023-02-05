@@ -78,7 +78,9 @@ partial class SDKPlayer
 	[ClientRpc]
 	void TakeDamageRPC( Entity attacker, Entity weapon, float damage, string[] tags, Vector3 position, Vector3 force )
 	{
-		OnTakeDamageEffects( attacker, weapon, damage, tags, position, force );
+#warning TODO: Doing anything in here will cause the game to crash due to 
+
+		//OnTakeDamageEffects( attacker, weapon, damage, tags, position, force );
 	}
 
 	public virtual void OnTakeDamageEffects( Entity attacker, Entity weapon, float damage, string[] tags, Vector3 position, Vector3 force ) { }
