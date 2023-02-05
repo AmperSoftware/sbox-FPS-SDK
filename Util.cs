@@ -114,7 +114,7 @@ public static class CollisionTags
 	public const string NPCClip = "npcclip";
 }
 
-public static class DamageFlags
+public static class DamageTags
 {
 	public const string Generic = "generic";
 	public const string Bullet = "bullet";

@@ -278,13 +278,13 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 			return;
 
 		Health = 0;
-		List<string> tags = new() { DamageFlags.Generic };
+		List<string> tags = new() { DamageTags.Generic };
 
 		if ( explode )
 		{
 			// If we set to explode ourselves, gib!
-			tags.Add( DamageFlags.Blast );
-			tags.Add( DamageFlags.AlwaysGib );
+			tags.Add( DamageTags.Blast );
+			tags.Add( DamageTags.AlwaysGib );
 		}
 
 		var info = ExtendedDamageInfo.Create( 1 )
