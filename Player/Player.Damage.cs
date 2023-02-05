@@ -55,7 +55,7 @@ partial class SDKPlayer
 		OnTakeDamageReaction( info );
 
 		// Make an rpc to do stuff clientside.
-		TakeDamageRPC( info.Attacker, info.Weapon, info.Damage, info.Tags.ToArray(), info.HitPosition, info.Force );
+		//TakeDamageRPC( info.Attacker, info.Weapon, info.Damage, info.Tags.ToArray(), info.HitPosition, info.Force );
 
 		// Let SDKGame know about this.
 		SDKGame.Current.PlayerHurt( this, info );
@@ -75,14 +75,15 @@ partial class SDKPlayer
 		DebugOverlay.Line( info.OriginPosition, info.HitPosition, Color.Yellow, 3 );
 	}
 
+#warning TODO: Doing anything in TakeDamageRPC will cause the game to crash due to networking damage tags, find out a better way of doing that!
+	/*
 	[ClientRpc]
 	void TakeDamageRPC( Entity attacker, Entity weapon, float damage, string[] tags, Vector3 position, Vector3 force )
 	{
-#warning TODO: Doing anything in here will cause the game to crash due to 
-
-		//OnTakeDamageEffects( attacker, weapon, damage, tags, position, force );
+		OnTakeDamageEffects( attacker, weapon, damage, tags, position, force );
 	}
-
+	*/
+	
 	public virtual void OnTakeDamageEffects( Entity attacker, Entity weapon, float damage, string[] tags, Vector3 position, Vector3 force ) { }
 
 	public bool PreventDeath( ExtendedDamageInfo info )
