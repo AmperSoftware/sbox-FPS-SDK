@@ -9,15 +9,14 @@ namespace Amper.FPS;
 public struct ExtendedDamageInfo
 {
 	public Entity Attacker { get; set; }
-	public Entity Inflictor { get; set; } 
-	public Entity Weapon { get; set; } 
-	public Vector3 Force { get; set; } 
+	public Entity Inflictor { get; set; }
+	public Entity Weapon { get; set; }
+	public Vector3 Force { get; set; }
 	public float Damage { get; set; }
-	public IReadOnlyCollection<string> Tags => (IReadOnlyCollection<string>)_tags;
-	private IList<string> _tags { get; set; } 
-	public PhysicsBody Body { get; set; } 
-	public Hitbox Hitbox { get; set; } 
-	public int BoneIndex { get; set; } 
+	public List<string> Tags { get; set; }
+	public PhysicsBody Body { get; set; }
+	public Hitbox Hitbox { get; set; }
+	public int BoneIndex { get; set; }
 	/// <summary>
 	/// The position at which this damage has impacted with the victim. I.e. position that bullet has 
 	/// hit in the victim's hitboxes. The blood at the target will appear at this position.
@@ -36,7 +35,7 @@ public struct ExtendedDamageInfo
 	{
 		ExtendedDamageInfo result = default;
 		result.Damage = damage;
-		result._tags = new List<string>();
+		result.Tags = new List<string>();
 
 		return result;
 	}
@@ -59,56 +58,54 @@ public struct ExtendedDamageInfo
 		return this;
 	}
 
-	public ExtendedDamageInfo SetTags(IList<string> tags)
+	public ExtendedDamageInfo SetTags( List<string> tags )
 	{
-		_tags = tags;
-
+		Tags = tags;
 		return this;
 	}
-	public ExtendedDamageInfo SetTags(IEnumerable<string> tags)
-	{
-		_tags = tags.ToList();
 
+	public ExtendedDamageInfo SetTags( IEnumerable<string> tags )
+	{
+		Tags = tags.ToList();
 		return this;
 	}
-	public ExtendedDamageInfo WithTags(IEnumerable<string> tags)
+
+	public ExtendedDamageInfo WithTags( IEnumerable<string> tags )
 	{
 		foreach ( var tag in tags )
 		{
-			_tags.Add( tag );
+			Tags.Add( tag );
+		}
+		return this;
+	}
+
+	public ExtendedDamageInfo WithTag( string tag )
+	{
+		Log.Info( tag );
+		Tags.Add( tag );
+
+		return this;
+	}
+
+	public ExtendedDamageInfo WithoutTags( IEnumerable<string> tags )
+	{
+		foreach ( var tag in tags )
+		{
+			Tags.Remove( tag );
 		}
 
 		return this;
 	}
-	public ExtendedDamageInfo WithTags( params string[] tags ) => WithTags( tags );
 
-	public ExtendedDamageInfo WithTag(string tag)
+	public ExtendedDamageInfo WithoutTag( string tag )
 	{
-		_tags.Add( tag );
-
+		Tags.Remove( tag );
 		return this;
 	}
 
-	public ExtendedDamageInfo WithoutTags( IEnumerable<string> tags)
+	public bool HasTag( string tag )
 	{
-		foreach ( var tag in tags )
-		{
-			_tags.Remove( tag );
-		}
-
-		return this;
-	}
-	public ExtendedDamageInfo WithoutTags( params string[] tags ) => WithoutTags( tags );
-
-	public ExtendedDamageInfo WithoutTag(string tag)
-	{
-		_tags.Remove( tag );
-		return this;
-	}
-
-	public bool HasTag(string tag)
-	{
-		return _tags != null && _tags.Contains( tag );
+		return Tags != null && Tags.Contains( tag );
 	}
 
 	public ExtendedDamageInfo WithHitBody( PhysicsBody body )
@@ -128,7 +125,7 @@ public struct ExtendedDamageInfo
 		BoneIndex = bone;
 		return this;
 	}
-	
+
 	public ExtendedDamageInfo WithDamage( float damage )
 	{
 		Damage = damage;
