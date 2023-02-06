@@ -81,7 +81,6 @@ public struct ExtendedDamageInfo
 
 	public ExtendedDamageInfo WithTag( string tag )
 	{
-		Log.Info( tag );
 		Tags.Add( tag );
 
 		return this;
