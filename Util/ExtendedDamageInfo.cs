@@ -12,6 +12,7 @@ public struct ExtendedDamageInfo
 	public Entity Inflictor { get; set; }
 	public Entity Weapon { get; set; }
 	public Vector3 Force { get; set; }
+	public float ForceScale { get; set; }
 	public float Damage { get; set; }
 	public List<string> Tags { get; set; }
 	public PhysicsBody Body { get; set; }
@@ -31,6 +32,10 @@ public struct ExtendedDamageInfo
 	/// </summary>
 	public Vector3 ReportPosition { get; set; }
 
+	public ExtendedDamageInfo()
+	{
+		ForceScale = 1;
+	}
 	public static ExtendedDamageInfo Create( float damage )
 	{
 		ExtendedDamageInfo result = default;
@@ -122,6 +127,12 @@ public struct ExtendedDamageInfo
 	public ExtendedDamageInfo WithBone( int bone )
 	{
 		BoneIndex = bone;
+		return this;
+	}
+
+	public ExtendedDamageInfo WithForceScale(float mult)
+	{
+		ForceScale = mult;
 		return this;
 	}
 
