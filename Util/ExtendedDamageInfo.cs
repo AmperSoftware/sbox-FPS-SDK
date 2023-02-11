@@ -40,6 +40,7 @@ public struct ExtendedDamageInfo
 	{
 		ExtendedDamageInfo result = default;
 		result.Damage = damage;
+		result.ForceScale = 1;
 		result.Tags = new List<string>();
 
 		return result;
