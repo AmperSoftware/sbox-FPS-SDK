@@ -14,7 +14,7 @@ partial class SDKPlayer
 	/// <summary>
 	/// Is this player in third person?
 	/// </summary>
-	public bool IsThirdPerson => false;
+	public virtual bool IsThirdPerson => false;
 	public virtual void CalculateView()
 	{
 		if ( IsObserver )
