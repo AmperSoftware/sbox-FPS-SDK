@@ -193,7 +193,7 @@ public abstract partial class Projectile : ModelEntity, ITeam
 
 	public virtual bool IsDestroyable => false;
 
-	public static T Create<T>(Vector3 origin, Vector3 velocity, Entity owner, Entity launcher, ExtendedDamageInfo info) where T : Projectile, new()
+	public static T Create<T>(Vector3 origin, Vector3 velocity, Entity owner, Entity launcher) where T : Projectile, new()
 	{
 		T ent = new();
 
@@ -203,10 +203,9 @@ public abstract partial class Projectile : ModelEntity, ITeam
 		ent.Owner = owner;
 		ent.Launcher = launcher;
 
-		info = info.WithAttacker( owner );
-		info = info.WithWeapon( launcher );
-		info = info.WithInflictor( ent );
-		ent.DamageInfo = info;
+		ent.DamageInfo = ent.DamageInfo.WithAttacker( owner );
+		ent.DamageInfo = ent.DamageInfo.WithWeapon( launcher );
+		ent.DamageInfo = ent.DamageInfo.WithInflictor( ent );
 
 		// Set the projectile's team to owner's team if it has a team.
 		if ( owner is ITeam ownerTeam )

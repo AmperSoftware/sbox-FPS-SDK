@@ -193,7 +193,8 @@ public struct ExtendedDamageInfo
 			Force = Force,
 			Damage = Damage,
 			Hitbox = Hitbox,
-			BoneIndex = BoneIndex
+			BoneIndex = BoneIndex,
+			Tags = new(Tags)
 		};
 
 		return info;
