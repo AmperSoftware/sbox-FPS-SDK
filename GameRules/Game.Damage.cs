@@ -92,8 +92,8 @@ public struct RadiusDamageInfo
 
 		var info = DamageInfo
 			.UsingTraceResult( tr )
-			.WithDamage( adjustedDamage )
-			.WithForce( force );
+			.WithDamage( adjustedDamage );
+			//.WithForce( force );
 
 		entity.TakeDamage( info );
 

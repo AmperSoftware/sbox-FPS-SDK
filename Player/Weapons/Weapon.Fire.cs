@@ -22,7 +22,7 @@ partial class SDKWeapon
 		return ExtendedDamageInfo.Create( damage )
 			.UsingTraceResult( tr )
 			.WithReportPosition( Player.GetAttackPosition() )
-			.WithForce( SDKGame.Current.CalculateForceFromDamage( tr.Direction, damage ) )
+			//.WithForce( SDKGame.Current.CalculateForceFromDamage( tr.Direction, damage ) )
 			.WithAttacker( Owner )
 			.WithInflictor( Owner )
 			.WithWeapon( this )
