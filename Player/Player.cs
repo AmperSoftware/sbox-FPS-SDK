@@ -90,7 +90,6 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 	public virtual void SimulateMovement()
 	{
 		EyeRotation = ViewAngles.ToRotation();
-		Rotation = Transform.RotationToLocal( ViewAngles.WithPitch( 0 ).WithRoll( 0 ).ToRotation() );
 
 		StartInterpolating();
 		SDKGame.Current.Movement?.Simulate( this );

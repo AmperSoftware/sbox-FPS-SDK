@@ -48,7 +48,7 @@ partial class SDKPlayer
 			angles.x += cl_thirdperson_pitch;
 			angles.y += cl_thirdperson_yaw;
 			angles.z += cl_thirdperson_roll;
-			Rotation = angles;
+			Camera.Rotation = angles;
 
 			var tpPos = Position - Rotation.Forward * cl_thirdperson_distance;
 			var tr = Trace.Ray( Position, tpPos )
