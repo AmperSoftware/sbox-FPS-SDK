@@ -11,9 +11,13 @@ partial class SDKGame
 			player.SwitchToNextBestWeapon();
 	}
 
-	[ConCmd.Server("noclip", Help ="Disable electromagnetic energies to be able to pass through walls")]
-	public static void Command_Noclip( IClient client )
+	[ConCmd.Admin("noclip", Help ="Disable electromagnetic energies to be able to pass through walls")]
+	public static void Command_Noclip()
 	{
+		var client = ConsoleSystem.Caller;
+		if ( !client.IsValid() )
+			return;
+
 		var player = client.Pawn as SDKPlayer;
 		if ( !player.IsValid() ) 
 			return;
