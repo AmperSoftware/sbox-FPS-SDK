@@ -38,7 +38,7 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 	public virtual float GetMaxHealth() => 100;
 
 	//public QAngle ViewAngles;
-	public override Ray AimRay => new( EyePosition , EyeRotation.Forward );
+	public override Ray AimRay => new( EyePosition, EyeRotation.Forward );
 
 	public override void FrameSimulate( IClient cl )
 	{
@@ -304,7 +304,9 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 	{
 		if ( Input.StopProcessing )
 			return;
-		
+
+		ActiveWeapon?.BuildInput();
+
 		ViewAngles += Input.AnalogLook;
 		ViewAngles = ViewAngles.WithPitch( ViewAngles.pitch.Clamp( -80f, 80f ) );
 
@@ -313,8 +315,6 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 			Input.AnalogLook = _forceViewAngles.Value;
 			_forceViewAngles = null;
 		}
-
-		ActiveWeapon?.BuildInput();
 
 		if ( Input.StopProcessing )
 			return;
