@@ -47,7 +47,6 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 		SDKGame.Current.Movement?.FrameSimulate( this );
 		ActiveWeapon?.FrameSimulate( cl );
 
-		InterpolateFrame();
 		CalculateView();
 	}
 
@@ -88,9 +87,7 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 
 	public virtual void SimulateMovement()
 	{
-		StartInterpolating();
 		SDKGame.Current.Movement?.Simulate( this );
-		StopInterpolating();
 	}
 
 	public virtual void Respawn()

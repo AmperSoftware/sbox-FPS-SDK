@@ -33,7 +33,7 @@ partial class SDKPlayer
 	public virtual void CalculatePlayerView()
 	{	
 		Camera.Position = this.GetEyePosition();
-		Camera.Rotation = ViewRotation.ToRotation();
+		Camera.Rotation = EyeRotation;
 		Camera.FirstPersonViewer = this;
 
 		SmoothViewOnStairs();
