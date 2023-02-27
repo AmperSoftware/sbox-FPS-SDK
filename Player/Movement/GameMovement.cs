@@ -3,6 +3,7 @@ using System;
 
 namespace Amper.FPS;
 
+[Obsolete("Use BaseGameMovement")]
 public partial class GameMovement
 {
 	protected SDKPlayer Player;
