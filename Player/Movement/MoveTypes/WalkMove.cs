@@ -85,7 +85,7 @@ partial class GameMovement
 
 	public virtual void WalkMove()
 	{
-		QAngle angles = Player.ViewRotation;
+		QAngle angles = Player.EyeRotation;
 		angles.AngleVectors( out var forward, out var right, out var up );
 		var oldGround = Player.GroundEntity;
 
@@ -227,7 +227,7 @@ partial class GameMovement
 
 	public virtual void AirMove()
 	{
-		QAngle angles = Player.ViewRotation;
+		QAngle angles = Player.EyeRotation;
 		angles.AngleVectors( out var forward, out var right, out var up );
 
 		var fmove = ForwardMove;

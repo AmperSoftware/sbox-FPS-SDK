@@ -11,9 +11,18 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 	public static SDKPlayer LocalPlayer => Game.LocalPawn as SDKPlayer;
 
 	[Net, Predicted] public Vector3 EyeLocalPosition { get; set; }
+	public Vector3 EyePosition 
+	{
+		get => Transform.PointToWorld( EyeLocalPosition );
+		set => EyeLocalPosition = Transform.PointToLocal( value );
+	}
+
 	[Net, Predicted] public Rotation EyeLocalRotation { get; set; }
-	public Vector3 EyePosition => Transform.PointToWorld( EyeLocalPosition );
-	public Rotation EyeRotation => Transform.RotationToWorld( EyeLocalRotation );
+	public Rotation EyeRotation
+	{
+		get => Transform.RotationToWorld( EyeLocalRotation );
+		set => EyeLocalRotation = Transform.RotationToLocal( value );
+	}
 
 	public override void Spawn()
 	{

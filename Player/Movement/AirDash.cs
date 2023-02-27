@@ -16,7 +16,7 @@ partial class GameMovement
 
 	public virtual void AirDash()
 	{
-		QAngle angles = Player.ViewRotation;
+		QAngle angles = Player.EyeRotation;
 		angles.AngleVectors( out var forward, out var right, out var up );
 
 		// Get the wish direction.
