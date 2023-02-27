@@ -3,6 +3,7 @@ using Sandbox;
 
 namespace Amper.FPS;
 
+[Obsolete("Use Angles")]
 public struct QAngle
 {
 	public float Pitch, Yaw, Roll;
