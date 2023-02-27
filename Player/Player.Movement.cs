@@ -5,30 +5,6 @@ namespace Amper.FPS;
 
 partial class SDKPlayer
 {
-	[ClientInput] public Angles ViewAngles { get; set; }
-	//[ClientInput] public Angles ActiveWeapon { get; set; }
-
-	//
-	// View Angles
-	//
-	Angles? _forceViewAngles { get; set; }
-
-	/// <summary>
-	/// Forces the player to change override their input view angles
-	/// and look at a specific angle. Can be called from both server 
-	/// and client with the same effect.
-	/// </summary>
-	public void ForceViewAngles( Angles angles )
-	{
-		if ( Game.IsServer ) ForceViewAnglesRPC( angles );
-		if ( Game.IsClient ) _forceViewAngles = angles;
-	}
-
-	[ClientRpc]
-	private void ForceViewAnglesRPC( Angles angles )
-	{
-		ForceViewAngles( angles );
-	}
 
 	[Net, Predicted] public float MaxSpeed { get; set; }
 	[Net, Predicted] public MoveType MoveType { get; set; }

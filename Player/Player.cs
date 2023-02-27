@@ -297,28 +297,6 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 
 	public virtual float DuckingSpeedModifier => 0.33f;
 
-	/// <summary>
-	/// Called from the gamemode, clientside only.
-	/// </summary>
-	public override void BuildInput()
-	{
-		if ( Input.StopProcessing )
-			return;
-
-		ActiveWeapon?.BuildInput();
-
-		ViewAngles += Input.AnalogLook;
-		ViewAngles = ViewAngles.WithPitch( ViewAngles.pitch.Clamp( -80f, 80f ) );
-
-		if ( _forceViewAngles.HasValue )
-		{
-			Input.AnalogLook = _forceViewAngles.Value;
-			_forceViewAngles = null;
-		}
-
-		if ( Input.StopProcessing )
-			return;
-	}
 
 	public virtual void AttemptRespawn()
 	{
