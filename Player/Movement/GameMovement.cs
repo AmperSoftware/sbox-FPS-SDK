@@ -400,7 +400,7 @@ public partial class GameMovement
 
 	public virtual void CheckParameters()
 	{
-		QAngle angles = Player.ViewAngles;
+		QAngle angles = Player.ViewRotation;
 		if ( Player.MoveType != MoveType.Isometric &&
 			Player.MoveType != MoveType.NoClip &&
 			Player.MoveType != MoveType.Observer )
@@ -448,11 +448,11 @@ public partial class GameMovement
 			}
 			else
 			{
-				Player.ViewAngles = Player.ViewAngles.WithRoll(0); // v_angle[ ROLL ];
+				Player.ViewRotation = Player.ViewRotation.WithRoll(0); // v_angle[ ROLL ];
 			}
 
-			Player.ViewAngles = Player.ViewAngles.WithPitch( v_angle.Pitch);
-			Player.ViewAngles = Player.ViewAngles.WithYaw(v_angle.Yaw);
+			Player.ViewRotation = Player.ViewRotation.WithPitch( v_angle.Pitch);
+			Player.ViewRotation = Player.ViewRotation.WithYaw(v_angle.Yaw);
 		}
 		else
 		{
@@ -462,7 +462,7 @@ public partial class GameMovement
 		
 		if ( angles.Yaw > 180 )
 		{
-			Player.ViewAngles = Player.ViewAngles.WithYaw(angles.Yaw - 360);
+			Player.ViewRotation = Player.ViewRotation.WithYaw(angles.Yaw - 360);
 		}
 	}
 }

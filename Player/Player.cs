@@ -10,6 +10,11 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 {
 	public static SDKPlayer LocalPlayer => Game.LocalPawn as SDKPlayer;
 
+	[Net, Predicted] public Vector3 EyeLocalPosition { get; set; }
+	[Net, Predicted] public Rotation EyeLocalRotation { get; set; }
+	public Vector3 EyePosition => Transform.PointToWorld( EyeLocalPosition );
+	public Rotation EyeRotation => Transform.RotationToWorld( EyeLocalRotation );
+
 	public override void Spawn()
 	{
 		base.Spawn();
@@ -23,22 +28,7 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 	[Net] public PlayerAnimator Animator { get; set; }
 	[Net] public float MaxHealth { get; set; }
 
-	// These are from Entity, but they're not networked by default.
-	// Client needs to be aware about these things.
-	[Net] public new Entity LastAttacker { get; set; }
-	[Net] public new Entity LastAttackerWeapon { get; set; }
-
-	public virtual Vector3 EyePosition
-	{
-		get => Transform.PointToWorld( EyeLocalPosition );
-		set => EyeLocalPosition = Transform.PointToLocal( value );
-	}
-	public Vector3 EyeLocalPosition { get; set; }
-	[Net] public Rotation EyeRotation { get; set; }
 	public virtual float GetMaxHealth() => 100;
-
-	//public QAngle ViewAngles;
-	public override Ray AimRay => new( EyePosition, EyeRotation.Forward );
 
 	public override void FrameSimulate( IClient cl )
 	{
@@ -89,8 +79,6 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 
 	public virtual void SimulateMovement()
 	{
-		EyeRotation = ViewAngles.ToRotation();
-
 		StartInterpolating();
 		SDKGame.Current.Movement?.Simulate( this );
 		StopInterpolating();
@@ -406,4 +394,9 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 
 	public virtual bool IsAreaTraversable( NavArea area ) => true;
 	public virtual void OnNavAreaChanged( NavArea enteredArea, NavArea leftArea ) { }
+
+	// These are from Entity, but they're not networked by default.
+	// Client needs to be aware about these things.
+	[Net] public new Entity LastAttacker { get; set; }
+	[Net] public new Entity LastAttackerWeapon { get; set; }
 }

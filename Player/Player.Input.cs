@@ -5,9 +5,6 @@ namespace Amper.FPS;
 
 public partial class SDKPlayer
 {
-	[Obsolete("Use InputViewAngles")]
-	public Angles ViewAngles { get => InputViewAngles; set => InputViewAngles = value; }
-
 	[ClientInput] public Vector3 InputMoveDirection { get; set; }
 	[ClientInput] public Angles InputViewAngles { get; set; }
 	[ClientInput] public SDKWeapon InputActiveWeapon { get; set; }
