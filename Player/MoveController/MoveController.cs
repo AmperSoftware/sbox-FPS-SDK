@@ -1,6 +1,6 @@
 ﻿namespace Amper.FPS;
 
-public class MoveController : MoveControllerBase
+public class MoveController : BaseMoveController
 {
 	public MoveController()
 	{

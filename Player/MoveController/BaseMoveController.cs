@@ -2,19 +2,52 @@
 
 namespace Amper.FPS;
 
-public abstract class MoveControllerBase
+public abstract class BaseMoveController
 {
 	public HashSet<MoveComponent> Components = new();
 	public SDKPlayer Player;
 
-	public void Simulate( SDKPlayer player )
+	public void PreTick( SDKPlayer player )
 	{
 		Player = player;
 
-		foreach( var comp in Components )
+		foreach ( var comp in Components )
 		{
+			if ( !comp.ShouldSimulateFor( player ) )
+				continue;
+
 			comp.CopyFrom( player );
-			comp.Simulate( player );
+			comp.PreTick( player );
+			comp.CopyTo( player );
+		}
+	}
+
+	public void Tick( SDKPlayer player )
+	{
+		Player = player;
+
+		foreach ( var comp in Components )
+		{
+			if ( !comp.ShouldSimulateFor( player ) )
+				continue;
+
+			comp.CopyFrom( player );
+			comp.Tick( player );
+			comp.CopyTo( player );
+		}
+	}
+
+	public void PostTick( SDKPlayer player )
+	{
+		Player = player;
+
+		foreach ( var comp in Components )
+		{
+			if ( !comp.ShouldSimulateFor( player ) )
+				continue;
+
+			comp.CopyFrom( player );
+			comp.PostTick( player );
 			comp.CopyTo( player );
 		}
 	}
@@ -46,7 +79,7 @@ public abstract class MoveControllerBase
 
 public partial class MoveComponent
 {
-	public MoveControllerBase Outer;
+	public BaseMoveController Outer;
 
 	public Vector3 Position;
 	public Rotation Rotation;
@@ -55,7 +88,11 @@ public partial class MoveComponent
 	public Vector3 Velocity;
 	public Vector3 BaseVelocity;
 
-	public virtual void Simulate( SDKPlayer player ) { }
+	public virtual bool ShouldSimulateFor( SDKPlayer player ) => true;
+
+	public virtual void PreTick( SDKPlayer player ) { }
+	public virtual void Tick( SDKPlayer player ) { }
+	public virtual void PostTick( SDKPlayer player ) { }
 	public virtual void FrameSimulate( SDKPlayer player ) { }
 
 	public virtual void CopyFrom( SDKPlayer player )

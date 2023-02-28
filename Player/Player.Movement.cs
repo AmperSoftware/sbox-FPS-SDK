@@ -25,7 +25,7 @@ partial class SDKPlayer
 
 	public virtual int MaxAirDucks => 1;
 	public bool IsDucking => DuckTime > 0;
-	public float DuckProgress => Math.Clamp( DuckTime / SDKGame.Current.Movement.TimeToDuck, 0, 1 );
+	public float DuckProgress => Math.Clamp( DuckTime / SDKGame.Current.OldMovement.TimeToDuck, 0, 1 );
 	[Net, Predicted] public float DuckTime { get; set; }
 	[Net, Predicted] public float DuckSpeed { get; set; }
 	[Net, Predicted] public bool IsDucked { get; set; }
