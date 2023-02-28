@@ -1,33 +1,45 @@
+using System;
+
 namespace Amper.FPS;
 
 partial class SDKPlayer
 {
+	public ViewState ViewStanding;
+	public ViewState ViewDucking;
+	public ViewState ViewDead;
+	public ViewState ViewObserver;
+
+	[Obsolete]
 	public virtual Vector3 GetPlayerMins( bool ducked )
 	{
 		if ( IsObserver ) 
-			return ViewVectors.ObserverHullMin;
+			return _ViewVectors.ObserverHullMin;
 		else 
-			return ducked ? ViewVectors.DuckHullMin : ViewVectors.HullMin;
+			return ducked ? _ViewVectors.DuckHullMin : _ViewVectors.HullMin;
 	}
 
+	[Obsolete]
 	public Vector3 GetPlayerMinsScaled( bool ducked )
 	{
 		return GetPlayerMins( ducked ) * Scale;
 	}
 
+	[Obsolete]
 	public virtual Vector3 GetPlayerMaxs( bool ducked )
 	{
 		if ( IsObserver ) 
-			return ViewVectors.ObserverHullMax;
+			return _ViewVectors.ObserverHullMax;
 		else 
-			return ducked ? ViewVectors.DuckHullMax : ViewVectors.HullMax;
+			return ducked ? _ViewVectors.DuckHullMax : _ViewVectors.HullMax;
 	}
 
+	[Obsolete]
 	public Vector3 GetPlayerMaxsScaled( bool ducked )
 	{
 		return GetPlayerMaxs( ducked ) * Scale;
 	}
 
+	[Obsolete]
 	public virtual Vector3 GetPlayerExtents( bool ducked )
 	{
 		var mins = GetPlayerMins( ducked );
@@ -36,62 +48,53 @@ partial class SDKPlayer
 		return mins.Abs() + maxs.Abs();
 	}
 
+	[Obsolete]
 	public Vector3 GetPlayerExtentsScaled( bool ducked )
 	{
 		return GetPlayerExtents( ducked ) * Scale;
 	}
 
+	[Obsolete]
 	public virtual Vector3 GetPlayerViewOffset( bool ducked )
 	{
-		return ducked ? ViewVectors.DuckViewOffset : ViewVectors.ViewOffset;
+		return ducked ? _ViewVectors.DuckViewOffset : _ViewVectors.ViewOffset;
 	}
 
+	[Obsolete]
 	public Vector3 GetPlayerViewOffsetScaled( bool ducked )
 	{
 		return GetPlayerViewOffset( ducked ) * Scale;
 	}
 
+	[Obsolete]
 	public virtual Vector3 GetDeadViewHeight()
 	{
-		return ViewVectors.DeadViewOffset;
+		return _ViewVectors.DeadViewOffset;
 	}
 
+	[Obsolete]
 	public Vector3 GetDeadViewHeightScaled()
 	{
 		return GetDeadViewHeight() * Scale;
 	}
 
-	public virtual ViewVectors ViewVectors => new()
-	{
-		ViewOffset = new( 0, 0, 64 ),
-
-		HullMin = new( -16, -16, 0 ),
-		HullMax = new( 16, 16, 72 ),
-
-		DuckHullMin = new( -16, -16, 0 ),
-		DuckHullMax = new( 16, 16, 36 ),
-		DuckViewOffset = new( 0, 0, 28 ),
-
-		ObserverHullMin = new( -10, -10, -10 ),
-		ObserverHullMax = new( 10, 10, 10 ),
-
-		DeadViewOffset = new( 0, 0, 14 )
-	};
+	[Obsolete]
+	public virtual ViewState _ViewVectors => new();
 }
 
-public struct ViewVectors
+public struct ViewState
 {
-	public Vector3 ViewOffset { get; set; }
+	public Vector3 Offset;
+	public BBox Hull;
 
-	public Vector3 HullMin { get; set; }
-	public Vector3 HullMax { get; set; }
+	public ViewState( Vector3 offset, BBox bodyHull )
+	{
+		Offset = offset;
+		Hull = bodyHull;
+	}
 
-	public Vector3 DuckHullMin { get; set; }
-	public Vector3 DuckHullMax { get; set; }
-	public Vector3 DuckViewOffset { get; set; }
-
-	public Vector3 ObserverHullMax { get; set; }
-	public Vector3 ObserverHullMin { get; set; }
-
-	public Vector3 DeadViewOffset { get; set; }
+	public ViewState( Vector3 offset, Vector3 bodyMins, Vector3 bodyMaxs )
+		: this( offset, new BBox( bodyMins, bodyMaxs ) )
+	{
+	}
 }

@@ -1,7 +1,6 @@
 using Sandbox;
-using System.Linq;
-using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Amper.FPS;
 
@@ -27,11 +26,26 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 	public override void Spawn()
 	{
 		base.Spawn();
+		SharedSpawn();
 
 		Animator = new PlayerAnimator();
 
 		TeamNumber = 0;
 		LastObserverMode = ObserverMode.Chase;
+	}
+
+	public override void ClientSpawn()
+	{
+		base.ClientSpawn();
+		SharedSpawn();
+	}
+
+	public virtual void SharedSpawn()
+	{
+		ViewStanding	= new( new( 0, 0, 64 ), new( -16, -16, 0 ), new( -16, -16, 72 ) );
+		ViewDucking		= new( new( 0, 0, 28 ), new( -16, -16, 0 ), new( -16, -16, 36 ) );
+		ViewDead		= new( new( 0, 0, 14 ), new( -10, -10, -10), new( -10, -10, -10 ) );
+		ViewObserver	= new( new( 0, 0, 0 ),	new( -10, -10, -10), new( -10, -10, -10 ) );
 	}
 
 	[Net] public PlayerAnimator Animator { get; set; }
@@ -44,7 +58,7 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 		base.FrameSimulate( cl );
 
 		Animator?.Simulate( this );
-		SDKGame.Current.Movement?.FrameSimulate( this );
+		SDKGame.Current.OldMovement?.FrameSimulate( this );
 		ActiveWeapon?.FrameSimulate( cl );
 
 		CalculateView();
@@ -72,22 +86,30 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 
 		SimulateHover();
 		SimulateUse();
+
+		PreTick();
+		Tick();
+		PostTick();
 	}
 
-	/// <summary>
-	/// Code runs here on BOTH CLIENT AND SERVER for ALL CLIENTS. You want to put here stuff that 
-	/// doesn't rely on client's input.
-	/// </summary>
-	[Event.Tick]
+	public virtual void PreTick()
+	{
+		SDKGame.Current.Movement.PreTick( this );
+	}
+
 	public virtual void Tick()
 	{
-		UpdateLastKnownArea();
-		DrawDebugPredictionHistory();
+		SDKGame.Current.Movement.Tick( this );
+	}
+
+	public virtual void PostTick()
+	{
+		SDKGame.Current.Movement.PostTick( this );
 	}
 
 	public virtual void SimulateMovement()
 	{
-		SDKGame.Current.Movement?.Simulate( this );
+		SDKGame.Current.OldMovement?.Simulate( this );
 	}
 
 	public virtual void Respawn()
