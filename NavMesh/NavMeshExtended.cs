@@ -1,9 +1,11 @@
 ﻿using Sandbox;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Amper.FPS;
 
+[Obsolete( "Obsolete?" )]
 public class NavMeshExtended
 {
 	public static NavMeshExtended Current { get; private set; }

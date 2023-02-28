@@ -5,26 +5,18 @@ namespace Amper.FPS;
 
 public partial class SDKGame : GameManager
 {
-	public new static SDKGame Current { get; set; }
+	public new static SDKGame Current;
+	public BaseMoveController Movement;
+	public GameMovement OldMovement;	
 
-	public GameMovement Movement { get; set; }
 	public PostProcessingManager PostProcessingManager { get; set; }
 	public NavMeshExtended NavMesh { get; set; }
 
 	public SDKGame()
 	{
 		Current = this;
-		Movement = new();
-
-		if ( Game.IsClient )
-		{
-			PostProcessingManager = new();
-		}
-
-		if ( Game.IsServer )
-		{
-			NavMesh = new();
-		}
+		OldMovement = new();
+		Movement = new MoveController();
 	}
 
 	public override void Spawn()
