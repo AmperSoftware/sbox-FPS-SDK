@@ -56,7 +56,7 @@ public partial class SDKPlayer
 
 		if ( ForcedFieldOfViewStartWith.HasValue )
 		{
-			LastFieldOfView = ForcedFieldOfViewStartWith.Value;
+			LastDesiredFieldOfView = ForcedFieldOfViewStartWith.Value;
 			ForcedFieldOfViewStartWith = null;
 		}
 
@@ -65,7 +65,7 @@ public partial class SDKPlayer
 
 		if ( LastDesiredFieldOfView != DesiredFieldOfView )
 		{
-			FieldOfViewAnimateStart = LastFieldOfView;
+			FieldOfViewAnimateStart = LastDesiredFieldOfView;
 			TimeSinceFieldOfViewAnimateStart = 0;
 		}
 
