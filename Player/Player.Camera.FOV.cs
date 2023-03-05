@@ -9,8 +9,6 @@ namespace Amper.FPS;
 
 public partial class SDKPlayer
 {
-	protected float LastFieldOfView { get; set; }
-
 	protected float DesiredFieldOfView { get; private set; }
 	protected float LastDesiredFieldOfView { get; private set; }
 	protected float FieldOfViewChangeTime { get; private set; }
@@ -37,7 +35,7 @@ public partial class SDKPlayer
 		{
 			// If our fov change time is set to something, but we've already reached out desired FOV, then reset the speed to zero.
 			// We will be changing fov instantly until we're set speed again.
-			if ( LastFieldOfView == DesiredFieldOfView && ForcedFieldOfViewChangeTime > 0 )
+			if ( Camera.FieldOfView == DesiredFieldOfView && ForcedFieldOfViewChangeTime > 0 )
 				ForcedFieldOfViewChangeTime = 0;
 
 			FieldOfViewChangeTime = ForcedFieldOfViewChangeTime;
@@ -56,7 +54,7 @@ public partial class SDKPlayer
 
 		if ( ForcedFieldOfViewStartWith.HasValue )
 		{
-			LastFieldOfView = ForcedFieldOfViewStartWith.Value;
+			LastDesiredFieldOfView = ForcedFieldOfViewStartWith.Value;
 			ForcedFieldOfViewStartWith = null;
 		}
 
@@ -65,7 +63,7 @@ public partial class SDKPlayer
 
 		if ( LastDesiredFieldOfView != DesiredFieldOfView )
 		{
-			FieldOfViewAnimateStart = LastFieldOfView;
+			FieldOfViewAnimateStart = LastDesiredFieldOfView;
 			TimeSinceFieldOfViewAnimateStart = 0;
 		}
 
@@ -92,7 +90,7 @@ public partial class SDKPlayer
 	{
 		DebugOverlay.ScreenText(
 			$"[FOV]\n" +
-			$"Last Value            {LastFieldOfView}\n" +
+			$"Last Value            {LastDesiredFieldOfView}\n" +
 			$"Desired               {DesiredFieldOfView}\n" +
 			$"Change Time           {FieldOfViewChangeTime}\n" +
 			$"Animate Start         {FieldOfViewAnimateStart}\n" +
