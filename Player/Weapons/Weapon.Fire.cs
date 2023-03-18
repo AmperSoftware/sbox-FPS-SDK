@@ -147,7 +147,7 @@ partial class SDKWeapon
 	[ConVar.Replicated] public static bool sv_debug_hitscan_traces { get; set; }
 	[ConVar.Replicated] public static bool sv_debug_hitscan_hits { get; set; }
 
-	protected void DrawDebugTrace( TraceResult tr, float time = 5 )
+	protected virtual void DrawDebugTrace( TraceResult tr, float time = 5 )
 	{
 		var drawTrace = sv_debug_hitscan_traces;
 		var drawHit = drawTrace || sv_debug_hitscan_hits;
