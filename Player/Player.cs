@@ -312,7 +312,7 @@ public partial class SDKPlayer : AnimatedEntity, IHasMaxHealth, IAcceptsExtended
 
 		if ( _forceViewAngles.HasValue )
 		{
-			Input.AnalogLook = _forceViewAngles.Value;
+			ViewAngles = _forceViewAngles.Value;
 			_forceViewAngles = null;
 		}
 
