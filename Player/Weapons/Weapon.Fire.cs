@@ -96,6 +96,8 @@ partial class SDKWeapon
 
 	public virtual void OnHitEntity( Entity entity, TraceResult tr )
 	{
+		if ( !Game.IsServer ) return;
+
 		// hack to play particle at HitPosition.
 		var endPos = tr.EndPosition;
 		tr.EndPosition = tr.HitPosition;
