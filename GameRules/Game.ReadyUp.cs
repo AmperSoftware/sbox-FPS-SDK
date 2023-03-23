@@ -12,12 +12,14 @@ namespace Amper.FPS
 		public virtual bool ReadyUpEnabled() => false;
 		public virtual void SimulateReadyUp()
 		{
-			if(sv_debug_ready)
+			if(sv_debug_readyup)
 			{
+				DebugOverlay.ScreenText( "[GAME READY STATUS]", new Vector2( 20, 20 ), -1, Color.Orange, 0.1f );
 				int i = 0;
-				foreach(var kv in ClientReadyStatus)
+				foreach(var cl in Game.Clients)
 				{
-					DebugOverlay.ScreenText($"Client {kv.Key.Name} is ready: {kv.Value}", new Vector2(20, 20), i, kv.Value ? Color.Green : Color.Red);
+					bool ready = ClientReadyStatus.ContainsKey( cl ) ? ClientReadyStatus[cl] : false;
+					DebugOverlay.ScreenText($"Client {cl.Name} is ready: {ready}", new Vector2( 20, 20 ), i, ready ? Color.Green : Color.Red, 0.1f );
 				}
 			}
 
@@ -30,7 +32,7 @@ namespace Amper.FPS
 		public virtual void EndedReadyUp() { }
 		[Net] public IDictionary<IClient, bool> ClientReadyStatus { get; set; }
 
-		[ConCmd.Server]
+		[ConCmd.Server("sv_toggle_ready")]
 		public static void ToggleReady()
 		{
 			if ( Current is not SDKGame game )
@@ -52,6 +54,6 @@ namespace Amper.FPS
 				EventDispatcher.InvokeEvent( new ClientReadyToggleEvent() { Client = cl, Status = newStatus } );
 			}
 		}
-		[ConVar.Replicated] public static bool sv_debug_ready { get; set; } = false;
+		[ConVar.Replicated] public static bool sv_debug_readyup { get; set; } = false;
 	}
 }
