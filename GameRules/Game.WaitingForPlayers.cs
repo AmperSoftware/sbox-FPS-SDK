@@ -14,23 +14,16 @@ partial class SDKGame
 
 	public virtual void CheckWaitingForPlayers()
 	{
-		if ( mp_waiting_for_players_cancel )
-		{
-			mp_waiting_for_players_cancel = false;
-		}
-
 		if ( IsWaitingForPlayers )
 		{
-			if ( TimeSinceWaitingForPlayersStart > WaitingForPlayersTime )
-			{
-				if ( IsEnoughPlayersToStartRound() )
-				{
-					StopWaitingForPlayers();
+			if ( mp_waiting_for_players_cancel )
+				mp_waiting_for_players_cancel = false;
+			else if ( TimeSinceWaitingForPlayersStart <= WaitingForPlayersTime || !IsEnoughPlayersToStartRound() )
+				return;
 
-					// Restart round immediately.
-					RestartRound();
-				}
-			}
+			StopWaitingForPlayers();
+			// Restart round immediately.
+			RestartRound();
 		}
 	}
 

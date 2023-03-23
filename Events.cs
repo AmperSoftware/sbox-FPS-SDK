@@ -1,4 +1,6 @@
-﻿namespace Amper.FPS;
+﻿using Sandbox;
+
+namespace Amper.FPS;
 
 //
 // Round
@@ -15,3 +17,12 @@
 [EventDispatcherEvent] public class GameRestartEvent : DispatchableEventBase { }
 [EventDispatcherEvent] public class GameOverEvent : DispatchableEventBase { }
 
+//
+// Client
+//
+
+[EventDispatcherEvent] public class ClientReadyToggleEvent : DispatchableEventBase 
+{
+	public IClient Client { get; set; }
+	public bool Status { get; set; }
+}

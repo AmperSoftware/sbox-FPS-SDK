@@ -46,9 +46,12 @@ partial class SDKGame
 	{
 		// If we have players that are ready to play, 
 		// start waiting for players timer.
-		if ( HasPlayers() && WaitingForPlayersEnabled() ) 
+		if ( HasPlayers() ) 
 		{
-			StartWaitingForPlayers();
+			if ( ReadyUpEnabled() )
+				TransitionToState(GameState.ReadyUp);
+			else if ( WaitingForPlayersEnabled() )
+				StartWaitingForPlayers();
 		}
 	}
 
@@ -63,9 +66,7 @@ partial class SDKGame
 	// ReadyUp
 	//
 
-	public virtual void SimulateReadyUp() { }
-	public virtual void StartedReadyUp() { }
-	public virtual void EndedReadyUp() { }
+	
 
 	//
 	// PreRound
