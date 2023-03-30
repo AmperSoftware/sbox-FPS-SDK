@@ -18,12 +18,13 @@ namespace Amper.FPS
 				int i = 0;
 				foreach(var cl in Game.Clients)
 				{
-					bool ready = ClientReadyStatus.ContainsKey( cl ) ? ClientReadyStatus[cl] : false;
+					bool ready = IsReady(cl);
 					DebugOverlay.ScreenText($"Client {cl.Name} is ready: {ready}", new Vector2( 20, 20 ), i, ready ? Color.Green : Color.Red, 0.1f );
+					i++;
 				}
 			}
 
-			if ( ClientReadyStatus.Any() && ClientReadyStatus.All( kv => kv.Value ) )
+			if ( ClientReadyStatus.Any() && Game.Clients.All(IsReady) )
 			{
 				RestartGame();
 			}
@@ -31,6 +32,7 @@ namespace Amper.FPS
 		public virtual void StartedReadyUp() { }
 		public virtual void EndedReadyUp() { }
 		[Net] public IDictionary<IClient, bool> ClientReadyStatus { get; set; }
+		public bool IsReady(IClient cl) => ClientReadyStatus.ContainsKey( cl ) ? ClientReadyStatus[cl] : false;
 
 		[ConCmd.Server("sv_toggle_ready")]
 		public static void ToggleReady()
