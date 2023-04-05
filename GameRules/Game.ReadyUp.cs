@@ -29,7 +29,14 @@ namespace Amper.FPS
 				RestartGame();
 			}
 		}
-		public virtual void StartedReadyUp() { }
+		public virtual void StartedReadyUp() 
+		{
+			ClientReadyStatus.Clear();
+			/*
+			foreach ( var kv in ClientReadyStatus )
+				ClientReadyStatus[kv.Key] = false;
+			*/
+		}
 		public virtual void EndedReadyUp() { }
 		[Net] public IDictionary<IClient, bool> ClientReadyStatus { get; set; }
 		public bool IsReady(IClient cl) => ClientReadyStatus.ContainsKey( cl ) ? ClientReadyStatus[cl] : false;

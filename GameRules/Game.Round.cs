@@ -29,11 +29,10 @@ partial class SDKGame
 		TotalRoundsPlayed++;
 
 		if ( !IsEnoughPlayersToStartRound() )
-		{
 			StartWaitingForPlayers();
-		}
+		else
+			TransitionToState( GameState.PreRound );
 
-		TransitionToState( GameState.PreRound );
 		OnRoundRestart();
 	}
 

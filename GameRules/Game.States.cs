@@ -107,7 +107,11 @@ partial class SDKGame
 	public virtual void SimulateRoundEnd()
 	{
 		if ( TimeSinceStateChange > mp_chattime )
+		{
 			RestartRound();
+			if ( ReadyUpEnabled() )
+				TransitionToState( GameState.ReadyUp );
+		}
 	}
 
 	public virtual void StartedRoundEnd()
