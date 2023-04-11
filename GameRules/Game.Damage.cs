@@ -10,6 +10,7 @@ public struct RadiusDamageInfo
 	public Entity Ignore;
 	public float Radius;
 	public float AttackerRadius;
+	public float AttackerDamage;
 	/// <summary>
 	/// Multiplier value that defines how much damage, compared to base damage we should deal to entities
 	/// that are on the edge of the explosion radius.
@@ -17,12 +18,13 @@ public struct RadiusDamageInfo
 	public float Falloff;
 	public bool DoLosCheck;
 
-	public RadiusDamageInfo( ExtendedDamageInfo info, float radius, Entity ignore, float attackerRadius, Entity target, bool losCheck = true )
+	public RadiusDamageInfo( ExtendedDamageInfo info, float radius, Entity ignore, float attackerRadius, float attackerDamage, Entity target, bool losCheck = true )
 	{
 		DamageInfo = info;
 		Radius = radius;
 		Ignore = ignore;
 		AttackerRadius = attackerRadius;
+		AttackerDamage = attackerDamage;
 		Target = target;
 		Falloff = SDKGame.Current.GetRadiusDamageFalloff();
 		DoLosCheck = losCheck;
@@ -39,9 +41,9 @@ public struct RadiusDamageInfo
 		//
 
 		var dmgPos = DamageInfo.HitPosition;
-		var eyePos = entity.GetEyePosition();
+		var entPos = entity.WorldSpaceBounds.Center;
 
-		var tr = Trace.Ray( dmgPos, eyePos )
+		var tr = Trace.Ray( dmgPos, entPos )
 			.WorldOnly()
 			.Ignore( Ignore )
 			.Ignore( entity )
@@ -62,20 +64,29 @@ public struct RadiusDamageInfo
 		if ( Target != entity )
 		{
 			// Use whichever is closer, absorigin or worldspacecenter
-			float toWorldSpaceCenter = (DamageInfo.HitPosition - entity.WorldSpaceBounds.Center).Length;
-			float toOrigin = (DamageInfo.HitPosition - entity.Position).Length;
+			float toWorldSpaceCenter = ( DamageInfo.HitPosition - entPos ).Length;
+			float toOrigin = ( DamageInfo.HitPosition - entity.Position ).Length;
 
 			distance = Math.Min( toWorldSpaceCenter, toOrigin );
 		}
 
-		// If we are applying damage to the attacker and we have attacker radius set to some value,
-		// use attacker radius, otherwise use normal radius.
-		var radius = entity == DamageInfo.Attacker && AttackerRadius > 0
-					? AttackerRadius
-					: Radius;
+		var radius = Radius;
+		var damage = DamageInfo.Damage;
+		
+		// If we are applying info to the attacker,
+		// use attacker radius and damage, otherwise use normal values.
+		if ( entity == DamageInfo.Attacker )
+		{
+			radius = AttackerRadius;
+			damage =  AttackerDamage;
+		}
 
-		var maxDamage = DamageInfo.Damage;
-		var minDamage = DamageInfo.Damage * Falloff;
+		// if we're outside of the radius, exit now.
+		if ( Radius < tr.Distance || Radius == 0 )
+			return;
+
+		var maxDamage = damage;
+		var minDamage = damage * Falloff;
 
 		var adjustedDamage = distance.RemapClamped( 0, radius, maxDamage, minDamage );
 
@@ -87,8 +98,8 @@ public struct RadiusDamageInfo
 		// Adjust damage info
 		//
 
-		var dir = (eyePos - dmgPos).Normal;
-		var force = SDKGame.Current.CalculateForceFromDamage( dir, adjustedDamage );
+		//var dir = (entPos - dmgPos).Normal;
+		//var force = SDKGame.Current.CalculateForceFromDamage( dir, adjustedDamage );
 
 		var info = DamageInfo
 			.UsingTraceResult( tr )
@@ -137,7 +148,6 @@ public struct RadiusDamageInfo
 				$"{Math.Floor( falloff * 100 )}%\n" +
 				$"{Math.Floor( damage )}HP"
 			, DamageInfo.HitPosition + Radius * Vector3.Up * lerp, 5 );
-
 		}
 	}
 }
@@ -154,8 +164,8 @@ partial class SDKGame
 
 		if ( info.Radius > 0 )
 		{
-			var entities = FindInSphere( info.DamageInfo.HitPosition, info.Radius );
-			foreach ( var entity in entities )
+			var entities = FindInSphere( info.DamageInfo.HitPosition, Math.Max( info.Radius, info.AttackerRadius ) );
+			foreach (var entity in entities)
 			{
 				info.ApplyToEntity( entity );
 			}

@@ -163,7 +163,7 @@ public abstract partial class Projectile : ModelEntity, ITeam
 
 		if ( Owner.IsValid() ) 
 		{
-			var radius = new RadiusDamageInfo( DamageInfo, Radius, this, AttackerRadius, Enemy );
+			var radius = new RadiusDamageInfo( DamageInfo, Radius, this, AttackerRadius, AttackerDamage, Enemy );
 			SDKGame.Current.ApplyRadiusDamage( radius );
 		}
 
@@ -189,7 +189,8 @@ public abstract partial class Projectile : ModelEntity, ITeam
 	}
 
 	public virtual float Radius => 146;
-	public virtual float AttackerRadius => 121;
+	public virtual float AttackerRadius => Radius;
+	public virtual float AttackerDamage => DamageInfo.Damage;
 
 	public virtual bool IsDestroyable => false;
 
@@ -203,10 +204,11 @@ public abstract partial class Projectile : ModelEntity, ITeam
 		ent.Owner = owner;
 		ent.Launcher = launcher;
 
-		ent.DamageInfo = ent.DamageInfo.WithDamage( damage );
-		ent.DamageInfo = ent.DamageInfo.WithAttacker( owner );
-		ent.DamageInfo = ent.DamageInfo.WithWeapon( launcher );
-		ent.DamageInfo = ent.DamageInfo.WithInflictor( ent );
+		ent.DamageInfo = ent.DamageInfo
+			.WithDamage( damage)
+			.WithAttacker( owner )
+			.WithWeapon( launcher )
+			.WithInflictor( ent );
 
 		// Set the projectile's team to owner's team if it has a team.
 		if ( owner is ITeam ownerTeam )
