@@ -10,7 +10,7 @@ partial class SDKPlayer
 			return ducked ? ViewVectors.DuckHullMin : ViewVectors.HullMin;
 	}
 
-	public Vector3 GetPlayerMinsScaled( bool ducked )
+	public Vector3 GetPlayerMinsScaled( bool ducked = false )
 	{
 		return GetPlayerMins( ducked ) * Scale;
 	}
@@ -23,7 +23,7 @@ partial class SDKPlayer
 			return ducked ? ViewVectors.DuckHullMax : ViewVectors.HullMax;
 	}
 
-	public Vector3 GetPlayerMaxsScaled( bool ducked )
+	public Vector3 GetPlayerMaxsScaled( bool ducked = false )
 	{
 		return GetPlayerMaxs( ducked ) * Scale;
 	}
