@@ -31,20 +31,20 @@ partial class SDKPlayer
 			if ( IsSpectating )
 			{
 				// change the mode
-				if ( Input.Pressed( InputButton.Jump ) )
+				if ( Input.Pressed( "Jump" ) )
 				{
 					SwitchToNextObserverMode();
 				}
 
 				// next target
-				if ( Input.Pressed( InputButton.PrimaryAttack ) )
+				if ( Input.Pressed( "Attack1" ) )
 				{
 					var target = FindNextObserverTarget( false );
 					if ( target != null ) SetObserverTarget( target );
 				}
 
 				// prev target
-				if ( Input.Pressed( InputButton.SecondaryAttack ) )
+				if ( Input.Pressed( "Attack2" ) )
 				{
 					var target = FindNextObserverTarget( true );
 					if ( target != null ) SetObserverTarget( target );

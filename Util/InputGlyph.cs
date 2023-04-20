@@ -5,7 +5,7 @@ namespace Amper.FPS;
 
 public class InputGlyph : Image
 {
-	public InputButton Button { get; set; }
+	public string Button { get; set; }
 	public InputGlyphSize Size { get; set; }
 
 	static Texture UnboundTexture = Texture.Load( FileSystem.Mounted, "/ui/unbound.png" );

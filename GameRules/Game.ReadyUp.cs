@@ -41,7 +41,7 @@ namespace Amper.FPS
 		[Net] public IDictionary<IClient, bool> ClientReadyStatus { get; set; }
 		public bool IsReady(IClient cl) => ClientReadyStatus.ContainsKey( cl ) ? ClientReadyStatus[cl] : false;
 
-		[ConCmd.Server("sv_toggle_ready")]
+		[ConCmd.Server("toggle_ready")]
 		public static void ToggleReady()
 		{
 			if ( Current is not SDKGame game )

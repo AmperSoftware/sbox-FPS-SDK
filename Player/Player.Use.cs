@@ -43,12 +43,12 @@ partial class SDKPlayer
 	//
 
 	public Entity UseEntity { get; protected set; }
-
+	public virtual string UseButton => "Use";
 	public virtual void SimulateUse()
 	{
 		using var _ = Prediction.Off();
 
-		if ( Input.Pressed( InputButton.Use ) )
+		if ( Input.Pressed( UseButton ) )
 		{
 			if ( !AttemptUse() )
 			{
@@ -61,7 +61,7 @@ partial class SDKPlayer
 		if ( !UseEntity.IsValid() )
 			return;
 
-		if ( !Input.Down( InputButton.Use ) )
+		if ( !Input.Down( UseButton ) )
 		{
 			StopUsing();
 			return;
