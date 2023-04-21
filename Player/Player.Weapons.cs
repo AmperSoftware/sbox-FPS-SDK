@@ -8,7 +8,7 @@ namespace Amper.FPS;
 partial class SDKPlayer
 {
 	public IEnumerable<SDKWeapon> Weapons => Children.OfType<SDKWeapon>();
-	[Net, Predicted] public SDKWeapon ActiveWeapon { get; set; }
+	[Net] public SDKWeapon ActiveWeapon { get; set; }
 	[ClientInput] public Entity RequestedActiveWeapon { get; set; }
 	[Predicted] SDKWeapon LastActiveWeapon { get; set; }
 
@@ -56,7 +56,7 @@ partial class SDKPlayer
 		}
 	}
 
-	public bool SwitchToWeapon( SDKWeapon weapon, bool rememberLast = true )
+	public bool SwitchToWeapon( SDKWeapon weapon, bool switchRequested = false )
 	{
 		if ( !weapon.IsValid() )
 			return false;
@@ -78,6 +78,8 @@ partial class SDKPlayer
 		}
 
 		ActiveWeapon = weapon;
+		if(switchRequested)
+			RequestedActiveWeapon = weapon;
 		return true;
 	}
 
