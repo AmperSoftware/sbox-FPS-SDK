@@ -1,5 +1,6 @@
 using Sandbox;
 using System.Linq;
+using TFS2;
 
 namespace Amper.FPS;
 
@@ -20,7 +21,7 @@ public partial class SDKViewModel : BaseViewModel
 	{
 		base.PlaceViewmodel();
 
-		Camera.Main.SetViewModelCamera(cl_viewmodel_fov);
+		Camera.Main.SetViewModelCamera( ClientSettings.Current.ViewmodelFov );
 
 		var visible = ShouldDraw();
 		EnableDrawing = visible;
