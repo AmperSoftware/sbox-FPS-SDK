@@ -1,7 +1,6 @@
 ﻿using Sandbox;
 using System.Collections.Generic;
 using System.Linq;
-using TFS2;
 
 namespace Amper.FPS;
 
@@ -31,7 +30,7 @@ partial class SDKGame
 	[ClientRpc]
 	public static void PlaySoundRPC( string sound, SoundBroadcastChannel channel, bool stopprevious = true )
 	{
-		var snd = Sound.FromScreen( sound ).SetVolume( ClientSettings.Current.GameplayVolume ); //TODO: Separate settings per channel
+		var snd = Sound.FromScreen( sound );
 
 		if ( Current == null ) return;
 		if ( Current.BroadcastSounds == null ) return;
